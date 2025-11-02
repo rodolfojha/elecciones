@@ -1,0 +1,192 @@
+/* Estilos personalizados para inputs y selects - VERSIÓN SEGURA */
+/* Estos estilos solo se aplican cuando se usan las clases específicas */
+/* No afectan el resto de la aplicación */
+
+/* Contenedor específico para evitar conflictos */
+.modern-form-container .modern-input,
+.modern-form-container .modern-select,
+.modern-form-container .modern-textarea {
+    width: 100% !important;
+    padding: 12px 22px !important;
+    color: #374151 !important;
+    background-color: #ffffff !important;
+    border: 1px solid #d1d5db !important;
+    border-radius: 8px !important;
+    outline: none !important;
+    transition: all 0.2s ease-in-out !important;
+    box-sizing: border-box !important;
+    font-family: inherit !important;
+    font-size: 14px !important;
+    line-height: 1.5 !important;
+}
+
+.modern-form-container .modern-input::placeholder,
+.modern-form-container .modern-textarea::placeholder {
+    color: #9ca3af !important;
+}
+
+/* Estado de foco con fondo azul claro */
+.modern-form-container .modern-input:focus,
+.modern-form-container .modern-select:focus,
+.modern-form-container .modern-textarea:focus {
+    background-color: #eff6ff !important;
+    border-color: #3b82f6 !important;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+}
+
+/* Estilos para selects con icono dropdown */
+.modern-form-container .modern-select {
+    appearance: none !important;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e") !important;
+    background-position: right 12px center !important;
+    background-repeat: no-repeat !important;
+    background-size: 16px !important;
+    padding-right: 40px !important;
+}
+
+/* Estilos para date picker */
+.modern-form-container .modern-date {
+    width: 100% !important;
+    padding: 13px 36px 13px 52px !important;
+    color: #374151 !important;
+    background-color: #ffffff !important;
+    border: 1px solid #d1d5db !important;
+    border-radius: 8px !important;
+    outline: none !important;
+    transition: all 0.2s ease-in-out !important;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b7280'%3e%3cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z'/%3e%3c/svg%3e") !important;
+    background-position: left 16px center !important;
+    background-repeat: no-repeat !important;
+    background-size: 16px !important;
+    box-sizing: border-box !important;
+    font-family: inherit !important;
+    font-size: 14px !important;
+    line-height: 1.5 !important;
+}
+
+.modern-form-container .modern-date:focus {
+    background-color: #eff6ff !important;
+    border-color: #3b82f6 !important;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+}
+
+/* Labels con asterisco para campos requeridos */
+.modern-form-container .modern-label {
+    display: block !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    color: #374151 !important;
+    margin-bottom: 8px !important;
+    line-height: 1.5 !important;
+}
+
+.modern-form-container .modern-label.required::after {
+    content: ' *' !important;
+    color: #ef4444 !important;
+}
+
+/* Contenedor de campo con espaciado */
+.modern-form-container .modern-field {
+    margin-bottom: 24px !important;
+}
+
+/* Estilos para modo oscuro - Solo para elementos con clases específicas */
+.dark .modern-form-container .modern-input,
+.dark .modern-form-container .modern-select,
+.dark .modern-form-container .modern-textarea,
+.dark .modern-form-container .modern-date {
+    background-color: #1f2937 !important;
+    border-color: #4b5563 !important;
+    color: #e5e7eb !important;
+}
+
+.dark .modern-form-container .modern-input:focus,
+.dark .modern-form-container .modern-select:focus,
+.dark .modern-form-container .modern-textarea:focus,
+.dark .modern-form-container .modern-date:focus {
+    background-color: #1e3a8a !important;
+    border-color: #60a5fa !important;
+}
+
+.dark .modern-form-container .modern-label {
+    color: #d1d5db !important;
+}
+
+/* Estilos para formularios completos */
+.modern-form-container .modern-form {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 24px !important;
+}
+
+/* Botones con el mismo estilo */
+.modern-form-container .modern-button {
+    padding: 12px 24px !important;
+    background-color: #2563eb !important;
+    color: #ffffff !important;
+    font-weight: 500 !important;
+    border-radius: 8px !important;
+    border: none !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease-in-out !important;
+    font-family: inherit !important;
+    font-size: 14px !important;
+    line-height: 1.5 !important;
+    text-decoration: none !important;
+    display: inline-block !important;
+    text-align: center !important;
+}
+
+.modern-form-container .modern-button:hover {
+    background-color: #1d4ed8 !important;
+}
+
+.modern-form-container .modern-button:focus {
+    outline: none !important;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.3) !important;
+}
+
+.modern-form-container .modern-button-secondary {
+    padding: 12px 24px !important;
+    background-color: #e5e7eb !important;
+    color: #1f2937 !important;
+    font-weight: 500 !important;
+    border-radius: 8px !important;
+    border: none !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease-in-out !important;
+    font-family: inherit !important;
+    font-size: 14px !important;
+    line-height: 1.5 !important;
+    text-decoration: none !important;
+    display: inline-block !important;
+    text-align: center !important;
+}
+
+.modern-form-container .modern-button-secondary:hover {
+    background-color: #d1d5db !important;
+}
+
+.modern-form-container .modern-button-secondary:focus {
+    outline: none !important;
+    box-shadow: 0 0 0 3px rgba(107, 114, 128, 0.3) !important;
+}
+
+/* Estilos para grupos de campos */
+.modern-form-container .modern-field-group {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 24px !important;
+}
+
+@media (min-width: 768px) {
+    .modern-form-container .modern-field-group {
+        grid-template-columns: 1fr 1fr !important;
+    }
+}
+
+/* Estilos para campos de ancho completo */
+.modern-form-container .modern-field-full {
+    grid-column: 1 / -1 !important;
+}
+

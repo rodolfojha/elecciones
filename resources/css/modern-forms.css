@@ -1,0 +1,172 @@
+/* Estilos personalizados para inputs y selects basados en el diseño moderno */
+/* Estos estilos solo se aplican cuando se usan las clases específicas */
+/* Para evitar conflictos, todos los estilos están encapsulados en clases específicas */
+
+/* Estilos base para inputs y selects - Solo para elementos con clases específicas */
+.modern-input,
+.modern-select,
+.modern-textarea {
+    width: 100% !important;
+    padding: 12px 22px !important;
+    color: #374151 !important;
+    background-color: #ffffff !important;
+    border: 1px solid #d1d5db !important;
+    border-radius: 8px !important;
+    outline: none !important;
+    transition: all 0.2s ease-in-out !important;
+    box-sizing: border-box !important;
+}
+
+.modern-input::placeholder,
+.modern-textarea::placeholder {
+    color: #9ca3af;
+}
+
+/* Estado de foco con fondo azul claro */
+.modern-input:focus,
+.modern-select:focus,
+.modern-textarea:focus {
+    background-color: #eff6ff;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Estilos para selects con icono dropdown */
+.modern-select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 12px center;
+    background-repeat: no-repeat;
+    background-size: 16px;
+    padding-right: 40px;
+}
+
+/* Estilos para date picker */
+.modern-date {
+    width: 100%;
+    padding: 13px 36px 13px 52px;
+    color: #374151;
+    background-color: #ffffff;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    outline: none;
+    transition: all 0.2s ease-in-out;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b7280'%3e%3cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z'/%3e%3c/svg%3e");
+    background-position: left 16px center;
+    background-repeat: no-repeat;
+    background-size: 16px;
+}
+
+.modern-date:focus {
+    background-color: #eff6ff;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Labels con asterisco para campos requeridos */
+.modern-label {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    color: #374151;
+    margin-bottom: 8px;
+}
+
+.modern-label.required::after {
+    content: ' *';
+    color: #ef4444;
+}
+
+/* Contenedor de campo con espaciado */
+.modern-field {
+    margin-bottom: 24px;
+}
+
+/* Estilos para modo oscuro - Solo para elementos con clases específicas */
+.dark .modern-input,
+.dark .modern-select,
+.dark .modern-textarea,
+.dark .modern-date {
+    background-color: #1f2937 !important;
+    border-color: #4b5563 !important;
+    color: #e5e7eb !important;
+}
+
+.dark .modern-input:focus,
+.dark .modern-select:focus,
+.dark .modern-textarea:focus,
+.dark .modern-date:focus {
+    background-color: #1e3a8a !important;
+    border-color: #60a5fa !important;
+}
+
+.dark .modern-label {
+    color: #d1d5db !important;
+}
+
+/* Estilos para formularios completos */
+.modern-form {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* Botones con el mismo estilo */
+.modern-button {
+    padding: 12px 24px;
+    background-color: #2563eb;
+    color: #ffffff;
+    font-weight: 500;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+.modern-button:hover {
+    background-color: #1d4ed8;
+}
+
+.modern-button:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.3);
+}
+
+.modern-button-secondary {
+    padding: 12px 24px;
+    background-color: #e5e7eb;
+    color: #1f2937;
+    font-weight: 500;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+.modern-button-secondary:hover {
+    background-color: #d1d5db;
+}
+
+.modern-button-secondary:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(107, 114, 128, 0.3);
+}
+
+/* Estilos para grupos de campos */
+.modern-field-group {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+}
+
+@media (min-width: 768px) {
+    .modern-field-group {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+/* Estilos para campos de ancho completo */
+.modern-field-full {
+    grid-column: 1 / -1;
+}
+

@@ -1,0 +1,409 @@
+@import 'tailwindcss';
+@import '../../vendor/livewire/flux/dist/flux.css';
+
+@source '../views';
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../vendor/livewire/flux-pro/stubs/**/*.blade.php';
+@source '../../vendor/livewire/flux/stubs/**/*.blade.php';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+    --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+
+    --color-zinc-50: #fafafa;
+    --color-zinc-100: #f5f5f5;
+    --color-zinc-200: #e5e5e5;
+    --color-zinc-300: #d4d4d4;
+    --color-zinc-400: #a3a3a3;
+    --color-zinc-500: #737373;
+    --color-zinc-600: #525252;
+    --color-zinc-700: #404040;
+    --color-zinc-800: #262626;
+    --color-zinc-900: #171717;
+    --color-zinc-950: #0a0a0a;
+
+    --color-accent: var(--color-neutral-800);
+    --color-accent-content: var(--color-neutral-800);
+    --color-accent-foreground: var(--color-white);
+}
+
+@layer theme {
+    .dark {
+        --color-accent: var(--color-white);
+        --color-accent-content: var(--color-white);
+        --color-accent-foreground: var(--color-neutral-800);
+    }
+}
+
+@layer base {
+
+    *,
+    ::after,
+    ::before,
+    ::backdrop,
+    ::file-selector-button {
+        border-color: var(--color-gray-200, currentColor);
+    }
+}
+
+[data-flux-field]:not(ui-radio, ui-checkbox) {
+    @apply grid gap-2;
+}
+
+[data-flux-label] {
+    @apply  !mb-0 !leading-tight;
+}
+
+input:focus[data-flux-control],
+textarea:focus[data-flux-control],
+select:focus[data-flux-control] {
+    @apply outline-hidden ring-2 ring-accent ring-offset-2 ring-offset-accent-foreground;
+}
+
+/* Estilos personalizados para inputs y selects basados en el diseño moderno */
+
+/* Tipografía moderna para todo el sistema */
+.modern-input,
+.modern-select,
+.modern-textarea {
+    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    line-height: 1.5;
+}
+
+/* Inputs modernos con mejor apariencia */
+input[type="text"].modern-input,
+input[type="email"].modern-input,
+input[type="password"].modern-input,
+input[type="number"].modern-input,
+input[type="tel"].modern-input,
+input[type="url"].modern-input,
+input[type="date"].modern-input,
+select.modern-select,
+textarea.modern-textarea {
+    width: 100%;
+    padding: 12px 16px;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #374151;
+    background-color: #ffffff;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    outline: none;
+    transition: all 0.2s ease-in-out;
+    box-sizing: border-box;
+    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+}
+
+.modern-input::placeholder,
+.modern-textarea::placeholder {
+    color: #9ca3af;
+    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Estado de foco mejorado */
+.modern-input:focus,
+.modern-select:focus,
+.modern-textarea:focus {
+    background-color: #eff6ff;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Selects con mejor apariencia */
+.modern-select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 12px center;
+    background-repeat: no-repeat;
+    background-size: 16px;
+    padding-right: 40px;
+}
+
+/* Labels modernos */
+.modern-label {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    color: #374151;
+    margin-bottom: 8px;
+    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+}
+
+.modern-label.required::after {
+    content: ' *';
+    color: #ef4444;
+}
+
+/* Campo de fecha moderno */
+.modern-date {
+    width: 100%;
+    padding: 12px 16px;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #374151;
+    background-color: #ffffff;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    outline: none;
+    transition: all 0.2s ease-in-out;
+    box-sizing: border-box;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b7280'%3e%3cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z'/%3e%3c/svg%3e");
+    background-position: left 12px center;
+    background-repeat: no-repeat;
+    background-size: 16px;
+    padding-left: 40px;
+    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+}
+
+.modern-date:focus {
+    background-color: #eff6ff;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Campo de grupo para layout */
+.modern-field {
+    margin-bottom: 24px;
+}
+
+.modern-field-group {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+}
+
+@media (min-width: 768px) {
+    .modern-field-group {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.modern-field-full {
+    grid-column: span 1;
+}
+
+@media (min-width: 768px) {
+    .modern-field-full {
+        grid-column: span 2;
+    }
+}
+
+/* Modo oscuro */
+.dark .modern-input,
+.dark .modern-select,
+.dark .modern-textarea,
+.dark .modern-date {
+    background-color: #1f2937;
+    border-color: #4b5563;
+    color: #e5e7eb;
+}
+
+.dark .modern-input:focus,
+.dark .modern-select:focus,
+.dark .modern-textarea:focus,
+.dark .modern-date:focus {
+    background-color: #1e3a8a;
+    border-color: #3b82f6;
+}
+
+.dark .modern-label {
+    color: #d1d5db;
+}
+
+/* Estilos globales para mejorar la tipografía con Inter */
+html {
+    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+}
+
+body {
+    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+    font-variation-settings: 'opsz' 32;
+}
+
+/* Aplicar Inter a todos los elementos de texto */
+h1, h2, h3, h4, h5, h6,
+p, span, div, button, input, select, textarea, label {
+    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Mejorar el kerning (espacio entre letras) */
+h1, h2, h3, h4, h5, h6 {
+    letter-spacing: -0.025em;
+}
+
+/* Estilos modernos para componentes Flux */
+flux\input,
+flux\field,
+flux\select,
+flux\textarea {
+    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Input moderno para componentes Flux */
+flux\input input,
+flux\field input,
+flux\select select,
+flux\textarea textarea {
+    width: 100%;
+    padding: 12px 16px;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #374151;
+    background-color: #ffffff;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    outline: none;
+    transition: all 0.2s ease-in-out;
+    box-sizing: border-box;
+    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+    letter-spacing: -0.01em;
+}
+
+flux\input input:focus,
+flux\field input:focus,
+flux\select select:focus,
+flux\textarea textarea:focus {
+    background-color: #eff6ff;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+flux\input input::placeholder,
+flux\field input::placeholder,
+flux\select select::placeholder,
+flux\textarea textarea::placeholder {
+    color: #9ca3af;
+    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Labels modernos para componentes Flux */
+flux\input label,
+flux\field label,
+flux\select label,
+flux\textarea label {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    color: #374151;
+    margin-bottom: 8px;
+    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+}
+
+flux\input label.required::after,
+flux\field label.required::after,
+flux\select label.required::after,
+flux\textarea label.required::after {
+    content: ' *';
+    color: #ef4444;
+}
+
+/* Estilos para selects de Flux */
+flux\select select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 12px center;
+    background-repeat: no-repeat;
+    background-size: 16px;
+    padding-right: 40px;
+}
+
+/* Modo oscuro para componentes Flux */
+.dark flux\input input,
+.dark flux\field input,
+.dark flux\select select,
+.dark flux\textarea textarea {
+    background-color: #1f2937;
+    border-color: #4b5563;
+    color: #e5e7eb;
+}
+
+.dark flux\input input:focus,
+.dark flux\field input:focus,
+.dark flux\select select:focus,
+.dark flux\textarea textarea:focus {
+    background-color: #1e3a8a;
+    border-color: #3b82f6;
+}
+
+.dark flux\input label,
+.dark flux\field label,
+.dark flux\select label,
+.dark flux\textarea label {
+    color: #d1d5db;
+}
+
+/* Estilos modernos para inputs de archivo */
+input[type="file"].modern-file {
+    width: 100%;
+    padding: 12px 16px;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #374151;
+    background-color: #ffffff;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    outline: none;
+    transition: all 0.2s ease-in-out;
+    box-sizing: border-box;
+    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+}
+
+input[type="file"].modern-file:focus {
+    background-color: #eff6ff;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Estilos para el área de file input */
+.modern-file-area {
+    border: 2px dashed #d1d5db;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+}
+
+.modern-file-area:hover {
+    border-color: #3b82f6;
+    background-color: #eff6ff;
+}
+
+.modern-file-area.dragover {
+    border-color: #3b82f6;
+    background-color: #dbeafe;
+}
+
+/* Modo oscuro para inputs de archivo */
+.dark input[type="file"].modern-file {
+    background-color: #1f2937;
+    border-color: #4b5563;
+    color: #e5e7eb;
+}
+
+.dark input[type="file"].modern-file:focus {
+    background-color: #1e3a8a;
+    border-color: #3b82f6;
+}
+
+.dark .modern-file-area {
+    border-color: #4b5563;
+    background-color: #1f2937;
+}
+
+.dark .modern-file-area:hover {
+    border-color: #3b82f6;
+    background-color: #1e3a8a;
+}
+
+/* Estilos personalizados para inputs y selects basados en el diseño moderno */
+
