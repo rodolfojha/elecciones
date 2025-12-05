@@ -41,6 +41,7 @@ class CourseController extends Controller
             'description' => 'nullable|string',
             'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'status' => 'required|in:draft,published,archived',
+            'tipo' => 'required|in:Inglés,Programas técnicos laborales',
             'duration_minutes' => 'nullable|integer|min:0',
         ]);
 
@@ -87,6 +88,7 @@ class CourseController extends Controller
             'description' => 'nullable|string',
             'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'status' => 'required|in:draft,published,archived',
+            'tipo' => 'required|in:Inglés,Programas técnicos laborales',
             'duration_minutes' => 'nullable|integer|min:0',
         ]);
 

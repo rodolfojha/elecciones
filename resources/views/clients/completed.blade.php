@@ -6,14 +6,20 @@
                     <i class="fa-solid fa-check-circle mr-2 text-green-600"></i>
                     Clientes Completados
                 </h1>
-                <p class="text-gray-600 dark:text-gray-400">Historial de clientes con gestión finalizada y notas del operador</p>
+                <p class="text-gray-600 dark:text-gray-400">
+                    @if(auth()->user()->isAdmin())
+                        Historial de clientes con gestión finalizada y notas del operador
+                    @else
+                        Tus clientes con gestión finalizada
+                    @endif
+                </p>
             </div>
 
             <!-- Estadísticas -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                 <x-card
                     title="Total Completados"
-                    :value="$clients->total()"
+                    :value="$stats['total']"
                     subtitle="Clientes finalizados"
                     color="green"
                     icon="fa-solid fa-check-circle"
@@ -21,7 +27,7 @@
                 
                 <x-card
                     title="Hoy"
-                    :value="App\Models\Client::where('status', 'completed')->whereDate('updated_at', today())->count()"
+                    :value="$stats['today']"
                     subtitle="Completados hoy"
                     color="blue"
                     icon="fa-solid fa-calendar-day"
@@ -29,7 +35,7 @@
                 
                 <x-card
                     title="Esta Semana"
-                    :value="App\Models\Client::where('status', 'completed')->whereBetween('updated_at', [now()->startOfWeek(), now()->endOfWeek()])->count()"
+                    :value="$stats['this_week']"
                     subtitle="Completados esta semana"
                     color="purple"
                     icon="fa-solid fa-calendar-week"
@@ -49,9 +55,11 @@
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                                         Contacto
                                     </th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                                        Operador
-                                    </th>
+                                    @if(auth()->user()->isAdmin())
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                            Operador
+                                        </th>
+                                    @endif
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                                         Notas
                                     </th>
@@ -88,35 +96,31 @@
                                         <!-- Contacto -->
                                         <td class="px-6 py-4">
                                             <div class="text-sm text-gray-900 dark:text-white">
-                                                <div class="flex items-center mb-1">
+                                                <div class="flex items-center">
                                                     <i class="fa-solid fa-phone mr-2 text-gray-400"></i>
                                                     {{ $client->phone }}
                                                 </div>
-                                                @if($client->email)
-                                                    <div class="flex items-center text-xs text-gray-500 dark:text-gray-400">
-                                                        <i class="fa-solid fa-envelope mr-2"></i>
-                                                        {{ $client->email }}
-                                                    </div>
-                                                @endif
                                             </div>
                                         </td>
 
-                                        <!-- Operador -->
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="flex items-center">
-                                                <div class="h-8 w-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-semibold text-xs mr-2">
-                                                    {{ $client->assignedTo->initials() }}
-                                                </div>
-                                                <div class="text-sm">
-                                                    <div class="font-medium text-gray-900 dark:text-white">
-                                                        {{ $client->assignedTo->name }}
+                                        @if(auth()->user()->isAdmin())
+                                            <!-- Operador -->
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                <div class="flex items-center">
+                                                    <div class="h-8 w-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-semibold text-xs mr-2">
+                                                        {{ $client->assignedTo->initials() }}
                                                     </div>
-                                                    <div class="text-xs text-gray-500 dark:text-gray-400">
-                                                        {{ $client->assigned_at->format('d/m/Y') }}
+                                                    <div class="text-sm">
+                                                        <div class="font-medium text-gray-900 dark:text-white">
+                                                            {{ $client->assignedTo->name }}
+                                                        </div>
+                                                        <div class="text-xs text-gray-500 dark:text-gray-400">
+                                                            {{ $client->assigned_at->format('d/m/Y') }}
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </td>
+                                            </td>
+                                        @endif
 
                                         <!-- Notas (Preview) -->
                                         <td class="px-6 py-4 max-w-xs">
@@ -141,8 +145,13 @@
 
                                         <!-- Acciones -->
                                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                            @php
+                                                $clientData = $client->toArray();
+                                                $clientData['course'] = $client->course ? $client->course->toArray() : null;
+                                                $clientData['assigned_to'] = $client->assignedTo ? ['name' => $client->assignedTo->name] : null;
+                                            @endphp
                                             <button 
-                                                onclick="openClientModal({{ json_encode($client) }})"
+                                                onclick="openClientModal(@js($clientData))"
                                                 class="inline-flex items-center px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium rounded-md transition-colors"
                                             >
                                                 <i class="fa-solid fa-eye mr-1"></i>
@@ -261,6 +270,20 @@
                                 <label class="text-xs text-gray-500 dark:text-gray-400">Completado</label>
                                 <p class="text-sm font-medium text-gray-900 dark:text-white">${new Date(client.updated_at).toLocaleString('es-ES')}</p>
                             </div>
+                            ${client.course ? `
+                                <div>
+                                    <label class="text-xs text-gray-500 dark:text-gray-400">Curso Asignado</label>
+                                    <p class="text-sm font-medium text-gray-900 dark:text-white">
+                                        <i class="fa-solid fa-graduation-cap mr-1 text-blue-500"></i>
+                                        ${client.course.title}
+                                    </p>
+                                </div>
+                            ` : `
+                                <div>
+                                    <label class="text-xs text-gray-500 dark:text-gray-400">Curso Asignado</label>
+                                    <p class="text-sm font-medium text-gray-500 dark:text-gray-400 italic">No asignado</p>
+                                </div>
+                            `}
                         </div>
                     </div>
                 </div>

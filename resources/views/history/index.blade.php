@@ -2,8 +2,20 @@
     <div class="py-6">
         <div class="mx-auto sm:px-6 lg:px-8">
             <div class="mb-6">
-                <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Mi Historial</h1>
-                <p class="text-gray-600 dark:text-gray-400">Todos los clientes que has atendido</p>
+                <h1 class="text-2xl font-bold text-gray-900 dark:text-white">
+                    @if(isset($isActiveFilter) && $isActiveFilter)
+                        Mis Clientes Activos
+                    @else
+                        Mi Historial
+                    @endif
+                </h1>
+                <p class="text-gray-600 dark:text-gray-400">
+                    @if(isset($isActiveFilter) && $isActiveFilter)
+                        Clientes asignados y en contacto
+                    @else
+                        Todos los clientes que has atendido
+                    @endif
+                </p>
             </div>
 
             <!-- Estadísticas del Historial -->
@@ -49,7 +61,13 @@
                             <svg class="h-6 w-6 text-blue-600 dark:text-blue-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                             </svg>
-                            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Historial de Clientes</h3>
+                            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+                                @if(isset($isActiveFilter) && $isActiveFilter)
+                                    Clientes Activos
+                                @else
+                                    Historial de Clientes
+                                @endif
+                            </h3>
                         </div>
                     </div>
 

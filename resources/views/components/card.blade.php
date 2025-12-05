@@ -42,8 +42,10 @@
 </div>
 
             <!-- Valor (número) -->
-            @if($value)
+            @if($value !== null)
                 <p class="text-2xl mt-4 font-bold text-gray-900 dark:text-white">{{ $value }}</p>
+            @else
+                <p class="text-2xl mt-4 font-bold text-gray-900 dark:text-white">0</p>
             @endif
 
             <!-- Fila inferior: Subtítulo y enlace "Ver" - Siempre al fondo -->

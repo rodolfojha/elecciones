@@ -30,6 +30,9 @@
             document.documentElement.classList.add('sidebar-state-collapsed');
             document.body?.classList.add('sidebar-state-collapsed');
         }
+        
+        // Forzar modo claro - eliminar clase dark si existe
+        document.documentElement.classList.remove('dark');
     })();
 </script>
 

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="dark">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
         @include('partials.head')
     </head>
@@ -18,6 +18,14 @@
             </div>
         </div>
         @fluxScripts
+        
+        <!-- Script para mantener modo claro siempre -->
+        <script>
+            (function() {
+                // Asegurar que siempre esté en modo claro
+                document.documentElement.classList.remove('dark');
+            })();
+        </script>
     </body>
 </html>
 

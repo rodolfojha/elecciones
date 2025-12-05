@@ -98,29 +98,21 @@
                                 <p class="text-sm text-gray-600 dark:text-gray-400 mb-5">Gestiona el sistema y usuarios</p>
                                 
                                 <div class="space-y-3">
-                                    <button class="w-full flex items-center justify-between p-4 bg-gray-900 hover:bg-gray-800 dark:bg-gray-700 dark:hover:bg-gray-600 text-white rounded-lg transition-colors">
+                                    <a href="{{ route('users.index') }}" class="w-full flex items-center justify-between p-4 bg-gray-900 hover:bg-gray-800 dark:bg-gray-700 dark:hover:bg-gray-600 text-white rounded-lg transition-colors">
                                         <div class="flex items-center">
                                             <i class="fa-solid fa-users mr-3"></i>
                                             <span>Gestionar Usuarios</span>
                                         </div>
                                         <i class="fa-solid fa-arrow-right text-sm"></i>
-                                    </button>
+                                    </a>
                                     
-                                    <button class="w-full flex items-center justify-between p-4 bg-gray-50 hover:bg-gray-100 dark:bg-gray-800/50 dark:hover:bg-gray-800 text-gray-900 dark:text-white rounded-lg transition-colors border border-gray-200 dark:border-gray-700">
+                                    <a href="{{ route('settings.index') }}" class="w-full flex items-center justify-between p-4 bg-gray-50 hover:bg-gray-100 dark:bg-gray-800/50 dark:hover:bg-gray-800 text-gray-900 dark:text-white rounded-lg transition-colors border border-gray-200 dark:border-gray-700">
                                         <div class="flex items-center">
                                             <i class="fa-solid fa-cog mr-3"></i>
                                             <span>Configuración</span>
                                         </div>
                                         <i class="fa-solid fa-arrow-right text-sm"></i>
-                                    </button>
-                                    
-                                    <button class="w-full flex items-center justify-between p-4 bg-gray-50 hover:bg-gray-100 dark:bg-gray-800/50 dark:hover:bg-gray-800 text-gray-900 dark:text-white rounded-lg transition-colors border border-gray-200 dark:border-gray-700">
-                                        <div class="flex items-center">
-                                            <i class="fa-solid fa-chart-bar mr-3"></i>
-                                            <span>Reportes</span>
-                                        </div>
-                                        <i class="fa-solid fa-arrow-right text-sm"></i>
-                                    </button>
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -144,21 +136,17 @@
                             <!-- Lista de estadísticas -->
                             <div class="space-y-2 mb-4">
                                 <div class="flex justify-between items-center py-2 border-b border-gray-200 dark:border-gray-700 last:border-b-0">
+                                    <span class="text-sm text-gray-900 dark:text-white">• Clientes en Espera</span>
+                                    <div class="flex items-center space-x-2">
+                                        <span class="text-sm font-medium text-gray-900 dark:text-white">{{ $stats['available_clients'] }}</span>
+                                    </div>
+                                </div>
+                                <div class="flex justify-between items-center py-2 border-b border-gray-200 dark:border-gray-700 last:border-b-0">
                                     <span class="text-sm text-gray-900 dark:text-white">• Llamadas Totales</span>
                                     <div class="flex items-center space-x-2">
-                                        <span class="text-sm font-medium text-gray-900 dark:text-white">0</span>
-                                    </div>
-                                </div>
-                                <div class="flex justify-between items-center py-2 border-b border-gray-200 dark:border-gray-700 last:border-b-0">
-                                    <span class="text-sm text-gray-900 dark:text-white">• Clientes Activos</span>
-                                    <div class="flex items-center space-x-2">
-                                        <span class="text-sm font-medium text-gray-900 dark:text-white">0</span>
-                                    </div>
-                                </div>
-                                <div class="flex justify-between items-center py-2 border-b border-gray-200 dark:border-gray-700 last:border-b-0">
-                                    <span class="text-sm text-gray-900 dark:text-white">• Tiempo Promedio</span>
-                                    <div class="flex items-center space-x-2">
-                                        <span class="text-sm font-medium text-gray-900 dark:text-white">0 min</span>
+                                        <span class="text-sm font-medium text-gray-900 dark:text-white">
+                                            {{ $stats['total_clients'] }}
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -185,20 +173,20 @@
                                 <p class="text-sm text-gray-600 dark:text-gray-400 mb-5">Gestiona tus llamadas y clientes</p>
                                 
                                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                    <button class="flex flex-col items-center justify-center p-6 bg-gray-900 hover:bg-gray-800 dark:bg-gray-700 dark:hover:bg-gray-600 text-white rounded-lg transition-colors">
+                                    <a href="{{ route('clients.index') }}" class="flex flex-col items-center justify-center p-6 bg-gray-900 hover:bg-gray-800 dark:bg-gray-700 dark:hover:bg-gray-600 text-white rounded-lg transition-colors">
                                         <i class="fa-solid fa-phone text-2xl mb-2"></i>
                                         <span class="font-medium">Nueva Llamada</span>
-                                    </button>
+                                    </a>
                                     
-                                    <button class="flex flex-col items-center justify-center p-6 bg-gray-50 hover:bg-gray-100 dark:bg-gray-800/50 dark:hover:bg-gray-800 text-gray-900 dark:text-white rounded-lg transition-colors border border-gray-200 dark:border-gray-700">
+                                    <a href="{{ route('history.index', ['filter' => 'active']) }}" class="flex flex-col items-center justify-center p-6 bg-gray-50 hover:bg-gray-100 dark:bg-gray-800/50 dark:hover:bg-gray-800 text-gray-900 dark:text-white rounded-lg transition-colors border border-gray-200 dark:border-gray-700">
                                         <i class="fa-solid fa-users text-2xl mb-2"></i>
                                         <span class="font-medium">Mis Clientes</span>
-                                    </button>
+                                    </a>
                                     
-                                    <button class="flex flex-col items-center justify-center p-6 bg-gray-50 hover:bg-gray-100 dark:bg-gray-800/50 dark:hover:bg-gray-800 text-gray-900 dark:text-white rounded-lg transition-colors border border-gray-200 dark:border-gray-700">
+                                    <a href="{{ route('history.index') }}" class="flex flex-col items-center justify-center p-6 bg-gray-50 hover:bg-gray-100 dark:bg-gray-800/50 dark:hover:bg-gray-800 text-gray-900 dark:text-white rounded-lg transition-colors border border-gray-200 dark:border-gray-700">
                                         <i class="fa-solid fa-clock text-2xl mb-2"></i>
                                         <span class="font-medium">Historial</span>
-                                    </button>
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -206,7 +194,7 @@
                 </div>
             @endif
 
-            <!-- Actividad Reciente -->
+            {{-- <!-- Actividad Reciente -->
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg border border-gray-200 dark:border-gray-700">
                 <div class="px-4 py-5 sm:p-6">
                     <div class="flex justify-between items-center mb-6">
@@ -308,7 +296,7 @@
                         </ul>
                     </div>
                 </div>
-            </div>
+            </div> --}}
         </div>
     </div>
 </x-layouts.app>

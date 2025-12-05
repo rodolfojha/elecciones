@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Client;
+use App\Models\Course;
 use Illuminate\Http\Request;
 
 class ClientController extends Controller
@@ -25,7 +26,15 @@ class ClientController extends Controller
             abort(403, 'No tienes permiso para ver este cliente.');
         }
 
-        return view('clients.show', compact('client'));
+        // Cargar relación course si existe
+        $client->load('course');
+
+        // Obtener cursos disponibles (publicados)
+        $courses = Course::where('status', 'published')
+            ->orderBy('title')
+            ->get();
+
+        return view('clients.show', compact('client', 'courses'));
     }
 
     /**
@@ -36,11 +45,13 @@ class ClientController extends Controller
         $request->validate([
             'status' => 'required|in:assigned,contacted,completed',
             'notes' => 'nullable|string',
+            'course_id' => 'nullable|exists:courses,id',
         ]);
 
         $client->update([
             'status' => $request->status,
             'notes' => $request->notes ?? $client->notes,
+            'course_id' => $request->course_id,
         ]);
 
         return redirect()->back()->with('success', 'Estado actualizado correctamente.');
@@ -51,12 +62,30 @@ class ClientController extends Controller
      */
     public function completed()
     {
-        $clients = Client::where('status', 'completed')
-            ->with('assignedTo')
+        $query = Client::where('status', 'completed');
+        
+        // Si es operador, solo ver sus propios clientes
+        if (!auth()->user()->isAdmin()) {
+            $query->where('assigned_to', auth()->id());
+        }
+        
+        $clients = $query->with(['assignedTo', 'course'])
             ->latest('updated_at')
             ->paginate(20);
+        
+        // Calcular estadísticas - usar la misma condición base
+        $baseCondition = [['status', '=', 'completed']];
+        if (!auth()->user()->isAdmin()) {
+            $baseCondition[] = ['assigned_to', '=', auth()->id()];
+        }
+        
+        $stats = [
+            'total' => Client::where($baseCondition)->count(),
+            'today' => Client::where($baseCondition)->whereDate('updated_at', today())->count(),
+            'this_week' => Client::where($baseCondition)->whereBetween('updated_at', [now()->startOfWeek(), now()->endOfWeek()])->count(),
+        ];
 
-        return view('clients.completed', compact('clients'));
+        return view('clients.completed', compact('clients', 'stats'));
     }
 }
 

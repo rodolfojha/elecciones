@@ -103,11 +103,11 @@
                                             </span>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                                            {{ $client->assigned_at?->diffForHumans() }}
+                                            {{ $client->assigned_at?->diffForHumans() ?? 'N/A' }}
                                         </td>
                                     @else
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                                            {{ $client->created_at->diffForHumans() }}
+                                            {{ $client->created_at?->diffForHumans() ?? 'N/A' }}
                                         </td>
                                     @endif
                                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">

@@ -39,10 +39,9 @@
         </flux:field>
 
         <!-- Remember Me -->
-        <flux:field>
-            <flux:checkbox name="remember" id="remember">
-                Recordarme
-            </flux:checkbox>
+        <flux:field variant="inline">
+            <flux:checkbox name="remember" id="remember" />
+            <flux:label for="remember">Recordarme</flux:label>
         </flux:field>
 
         <div class="flex flex-col gap-3">

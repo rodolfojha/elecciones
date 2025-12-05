@@ -30,13 +30,22 @@
                                 </div>
                                 <div class="ml-4">
                                     <h2 class="text-2xl font-bold text-gray-900 dark:text-white">{{ $client->full_name }}</h2>
+                                    @php
+                                        $statusLabels = [
+                                            'waiting' => 'En Espera',
+                                            'assigned' => 'Asignado',
+                                            'contacted' => 'Contactado',
+                                            'completed' => 'Completado'
+                                        ];
+                                        $statusLabel = $statusLabels[$client->status] ?? ucfirst($client->status);
+                                    @endphp
                                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
                                         {{ $client->status === 'waiting' ? 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200' : '' }}
                                         {{ $client->status === 'assigned' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200' : '' }}
                                         {{ $client->status === 'contacted' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200' : '' }}
                                         {{ $client->status === 'completed' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : '' }}
                                     ">
-                                        {{ ucfirst($client->status) }}
+                                        {{ $statusLabel }}
                                     </span>
                                 </div>
                             </div>
@@ -44,37 +53,13 @@
                             <div class="space-y-4">
                                 <div class="border-t border-gray-200 dark:border-gray-700 pt-4">
                                     <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-3">Información de Contacto</h3>
-                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        <div>
-                                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                                <i class="fa-solid fa-phone mr-2 text-gray-400"></i>Teléfono
-                                            </label>
-                                            <p class="text-lg text-gray-900 dark:text-white">{{ $client->phone }}</p>
-                                        </div>
-                                        @if($client->email)
-                                            <div>
-                                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                                    <i class="fa-solid fa-envelope mr-2 text-gray-400"></i>Email
-                                                </label>
-                                                <p class="text-lg text-gray-900 dark:text-white">{{ $client->email }}</p>
-                                            </div>
-                                        @endif
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                            <i class="fa-solid fa-phone mr-2 text-gray-400"></i>Teléfono
+                                        </label>
+                                        <p class="text-lg text-gray-900 dark:text-white">{{ $client->phone }}</p>
                                     </div>
                                 </div>
-
-                                @if($client->address || $client->city || $client->state)
-                                    <div class="border-t border-gray-200 dark:border-gray-700 pt-4">
-                                        <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-3">
-                                            <i class="fa-solid fa-location-dot mr-2"></i>Dirección
-                                        </h3>
-                                        @if($client->address)
-                                            <p class="text-gray-900 dark:text-white">{{ $client->address }}</p>
-                                        @endif
-                                        @if($client->city || $client->state)
-                                            <p class="text-gray-900 dark:text-white">{{ $client->city }}{{ $client->city && $client->state ? ', ' : '' }}{{ $client->state }}</p>
-                                        @endif
-                                    </div>
-                                @endif
 
                                 @if($client->notes)
                                     <div class="border-t border-gray-200 dark:border-gray-700 pt-4">
@@ -117,9 +102,39 @@
                                 @csrf
                                 @method('PATCH')
                                 
+                                <!-- Curso de Interés -->
+                                <div>
+                                    <label for="course_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                        <i class="fa-solid fa-graduation-cap mr-2"></i>Curso de Interés
+                                    </label>
+                                    @if($courses->count() > 0)
+                                        <select id="course_id" name="course_id" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white">
+                                            <option value="">Seleccione un curso...</option>
+                                            @foreach($courses as $course)
+                                                <option value="{{ $course->id }}" {{ old('course_id', $client->course_id) == $course->id ? 'selected' : '' }}>
+                                                    {{ $course->title }}@if($course->tipo) - {{ $course->tipo }}@endif
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    @else
+                                        <div class="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-md p-3">
+                                            <p class="text-sm text-yellow-800 dark:text-yellow-200">
+                                                <i class="fa-solid fa-exclamation-triangle mr-2"></i>
+                                                No hay cursos publicados disponibles.
+                                            </p>
+                                        </div>
+                                    @endif
+                                    @if($client->course)
+                                        <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
+                                            <i class="fa-solid fa-info-circle mr-1"></i>
+                                            Curso actual: <span class="font-medium">{{ $client->course->title }}</span>
+                                        </p>
+                                    @endif
+                                </div>
+                                
                                 <div>
                                     <label for="status" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Estado</label>
-                                    <select id="status" name="status" class="block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                    <select id="status" name="status" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white">
                                         <option value="assigned" {{ $client->status === 'assigned' ? 'selected' : '' }}>Asignado</option>
                                         <option value="contacted" {{ $client->status === 'contacted' ? 'selected' : '' }}>Contactado</option>
                                         <option value="completed" {{ $client->status === 'completed' ? 'selected' : '' }}>Completado</option>
@@ -128,7 +143,7 @@
 
                                 <div>
                                     <label for="notes" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Notas adicionales</label>
-                                    <textarea id="notes" name="notes" rows="3" class="block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500" placeholder="Agrega notas sobre la llamada...">{{ old('notes', $client->notes) }}</textarea>
+                                    <textarea id="notes" name="notes" rows="3" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white" placeholder="Agrega notas sobre la llamada...">{{ old('notes', $client->notes) }}</textarea>
                                 </div>
 
                                 <button type="submit" class="w-full inline-flex justify-center items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md transition-colors">
@@ -139,7 +154,7 @@
                         </div>
                     </div>
 
-                    <!-- Acciones Rápidas -->
+                    {{-- <!-- Acciones Rápidas -->
                     <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg border border-gray-200 dark:border-gray-700">
                         <div class="px-4 py-5 sm:p-6">
                             <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Acciones Rápidas</h3>
@@ -148,15 +163,9 @@
                                     <i class="fa-solid fa-phone mr-2"></i>
                                     Llamar Ahora
                                 </a>
-                                @if($client->email)
-                                    <a href="mailto:{{ $client->email }}" class="w-full inline-flex justify-center items-center px-4 py-2 bg-gray-900 hover:bg-gray-800 dark:bg-gray-700 dark:hover:bg-gray-600 text-white text-sm font-medium rounded-md transition-colors">
-                                        <i class="fa-solid fa-envelope mr-2"></i>
-                                        Enviar Email
-                                    </a>
-                                @endif
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
         </div>

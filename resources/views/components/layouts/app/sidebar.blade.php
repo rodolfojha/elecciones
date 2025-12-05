@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="dark">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
         @include('partials.head')
     </head>
@@ -40,6 +40,9 @@
                             <span class="sidebar-text">{{ __('Historial') }}</span>
                         </flux:navlist.item>
                     @endif
+                    <flux:navlist.item icon="chat-bubble-left-right" :href="route('messages.index')" :current="request()->routeIs('messages.*')" wire:navigate class="sidebar-nav-item">
+                        <span class="sidebar-text">{{ __('Mensajes') }}</span>
+                    </flux:navlist.item>
                 </flux:navlist.group>
 
                 @if(auth()->user()->isAdmin())
@@ -571,6 +574,33 @@
                 
                 observer.observe(document.body, { childList: true, subtree: true });
             }
+        </script>
+        
+        <!-- Script para mantener modo claro siempre -->
+        <script>
+            (function() {
+                function enforceLightMode() {
+                    // Asegurar que siempre esté en modo claro
+                    document.documentElement.classList.remove('dark');
+                }
+
+                // Aplicar inmediatamente
+                enforceLightMode();
+
+                // Re-aplicar después de navegaciones con Livewire
+                document.addEventListener('livewire:navigated', function() {
+                    setTimeout(enforceLightMode, 50);
+                });
+
+                document.addEventListener('livewire:updated', function() {
+                    setTimeout(enforceLightMode, 50);
+                });
+
+                // También después de que Alpine.js inicialice
+                document.addEventListener('alpine:init', function() {
+                    setTimeout(enforceLightMode, 50);
+                });
+            })();
         </script>
     </body>
 </html>

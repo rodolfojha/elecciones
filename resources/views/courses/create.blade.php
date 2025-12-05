@@ -67,6 +67,25 @@
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <!-- Tipo -->
+                        <div>
+                            <label for="tipo" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                Tipo <span class="text-red-500">*</span>
+                            </label>
+                            <select 
+                                name="tipo" 
+                                id="tipo"
+                                class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white @error('tipo') border-red-500 @enderror"
+                                required
+                            >
+                                <option value="Inglés" {{ old('tipo') === 'Inglés' ? 'selected' : '' }}>Inglés</option>
+                                <option value="Programas técnicos laborales" {{ old('tipo', 'Programas técnicos laborales') === 'Programas técnicos laborales' ? 'selected' : '' }}>Programas técnicos laborales</option>
+                            </select>
+                            @error('tipo')
+                                <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                            @enderror
+                        </div>
+
                         <!-- Duración -->
                         <div>
                             <label for="duration_minutes" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
@@ -85,7 +104,9 @@
                                 <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
                             @enderror
                         </div>
+                    </div>
 
+                    <div class="mb-6">
                         <!-- Estado -->
                         <div>
                             <label for="status" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">

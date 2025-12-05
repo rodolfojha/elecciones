@@ -21,6 +21,7 @@ class Client extends Model
         'assigned_to',
         'assigned_at',
         'status',
+        'course_id',
     ];
 
     protected $casts = [
@@ -33,6 +34,14 @@ class Client extends Model
     public function assignedTo()
     {
         return $this->belongsTo(User::class, 'assigned_to');
+    }
+
+    /**
+     * Relación con el curso asignado
+     */
+    public function course()
+    {
+        return $this->belongsTo(Course::class, 'course_id');
     }
 
     /**

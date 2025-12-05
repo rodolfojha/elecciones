@@ -14,6 +14,7 @@ class Course extends Model
         'description',
         'thumbnail',
         'status',
+        'tipo',
         'duration_minutes',
         'created_by',
     ];
