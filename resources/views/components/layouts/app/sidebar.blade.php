@@ -24,17 +24,28 @@
                     <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate class="sidebar-nav-item">
                         <span class="sidebar-text">{{ __('Dashboard') }}</span>
                     </flux:navlist.item>
+                    {{-- OCULTO: Clientes
                     <flux:navlist.item icon="users" :href="route('clients.index')" :current="request()->routeIs('clients.index') || request()->routeIs('clients.show')" wire:navigate class="sidebar-nav-item">
                         <span class="sidebar-text">{{ __('Clientes') }}</span>
                     </flux:navlist.item>
+                    --}}
+                    @if(auth()->user()->isTrabajador() || auth()->user()->isAdmin())
+                        <flux:navlist.item icon="user-plus" :href="route('voters.index')" :current="request()->routeIs('voters.*')" wire:navigate class="sidebar-nav-item">
+                            <span class="sidebar-text">{{ __('Registro Personas') }}</span>
+                        </flux:navlist.item>
+                    @endif
+                    {{-- OCULTO: Completados
                     <flux:navlist.item icon="check-circle" :href="route('clients.completed')" :current="request()->routeIs('clients.completed')" wire:navigate class="sidebar-nav-item">
                         <span class="sidebar-text">{{ __('Completados') }}</span>
                     </flux:navlist.item>
+                    --}}
+                    {{-- OCULTO: Monitoreo
                     @if(auth()->user()->isAdmin())
                         <flux:navlist.item icon="chart-bar" :href="route('monitor.index')" :current="request()->routeIs('monitor.*')" wire:navigate class="sidebar-nav-item">
                             <span class="sidebar-text">{{ __('Monitoreo') }}</span>
                         </flux:navlist.item>
                     @endif
+                    --}}
                     @if(!auth()->user()->isAdmin())
                         <flux:navlist.item icon="clock" :href="route('history.index')" :current="request()->routeIs('history.*')" wire:navigate class="sidebar-nav-item">
                             <span class="sidebar-text">{{ __('Historial') }}</span>
@@ -47,12 +58,17 @@
 
                 @if(auth()->user()->isAdmin())
                     <flux:navlist.group :heading="__('Administration')" class="grid sidebar-nav-group">
+                        <flux:navlist.item icon="user-group" :href="route('trabajadores.index')" :current="request()->routeIs('trabajadores.*')" wire:navigate class="sidebar-nav-item">
+                            <span class="sidebar-text">{{ __('Trabajadores') }}</span>
+                        </flux:navlist.item>
+                        {{-- OCULTO: Operadores y Cursos
                         <flux:navlist.item icon="user-group" :href="route('users.index')" :current="request()->routeIs('users.*')" wire:navigate class="sidebar-nav-item">
                             <span class="sidebar-text">{{ __('Operadores') }}</span>
                         </flux:navlist.item>
                         <flux:navlist.item icon="academic-cap" :href="route('courses.index')" :current="request()->routeIs('courses.*')" wire:navigate class="sidebar-nav-item">
                             <span class="sidebar-text">{{ __('Cursos') }}</span>
                         </flux:navlist.item>
+                        --}}
                     </flux:navlist.group>
                 @endif
             </flux:navlist>

@@ -76,6 +76,14 @@ class User extends Authenticatable
     }
 
     /**
+     * Check if user is trabajador.
+     */
+    public function isTrabajador(): bool
+    {
+        return $this->role === 'trabajador';
+    }
+
+    /**
      * Get the clients assigned to the user.
      */
     public function clients()

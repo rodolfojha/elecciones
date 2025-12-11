@@ -311,6 +311,12 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
     
+    // Rutas de Registro de Personas (Voters) - Solo para trabajadores y admin
+    Route::middleware([App\Http\Middleware\CheckRole::class . ':admin,trabajador'])->group(function () {
+        Route::resource('voters', App\Http\Controllers\VoterController::class);
+        Route::post('/voters/consultar-cedula', [App\Http\Controllers\VoterController::class, 'consultarCedula'])->name('voters.consultar-cedula');
+    });
+    
     // Configuración del perfil
     Route::get('/settings', [App\Http\Controllers\SettingsController::class, 'index'])->name('settings.index');
     Route::put('/settings', [App\Http\Controllers\SettingsController::class, 'update'])->name('settings.update');
@@ -341,6 +347,9 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth', App\Http\Middleware\CheckRole::class . ':admin'])->group(function () {
     // Gestión de operadores
     Route::resource('users', App\Http\Controllers\UserController::class);
+    
+    // Gestión de trabajadores
+    Route::resource('trabajadores', App\Http\Controllers\TrabajadorController::class);
     
     // Gestión de cursos
     Route::resource('courses', App\Http\Controllers\CourseController::class);
