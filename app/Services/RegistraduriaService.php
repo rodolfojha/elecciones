@@ -15,7 +15,13 @@ class RegistraduriaService
     public function __construct()
     {
         $this->scriptPath = storage_path('app/scripts/consulta_cedula_2captcha.py');
-        $this->pythonPath = storage_path('app/scripts/venv/bin/python');
+        
+        // Detectar sistema operativo para la ruta de Python
+        $isWindows = strtoupper(substr(PHP_OS, 0, 3)) === 'WIN';
+        $this->pythonPath = $isWindows 
+            ? storage_path('app/scripts/venv/Scripts/python.exe')
+            : storage_path('app/scripts/venv/bin/python');
+            
         $this->requestDir = storage_path('app/scripts/requests');
         $this->responseDir = storage_path('app/scripts/responses');
         
@@ -140,6 +146,7 @@ class RegistraduriaService
     protected function iniciarServicio(): void
     {
         $pidFile = storage_path('app/scripts/service.pid');
+        $isWindows = strtoupper(substr(PHP_OS, 0, 3)) === 'WIN';
         
         // Verificar si el servicio ya está corriendo
         if (file_exists($pidFile)) {
@@ -152,13 +159,24 @@ class RegistraduriaService
         }
 
         // Iniciar el servicio en segundo plano
-        $command = sprintf(
-            'cd %s && nohup %s %s > %s/service.log 2>&1 & echo $!',
-            escapeshellarg(storage_path('app/scripts')),
-            escapeshellarg($this->pythonPath),
-            escapeshellarg($this->scriptPath),
-            escapeshellarg(storage_path('app/scripts'))
-        );
+        if ($isWindows) {
+            // Windows: Usar Start-Process de PowerShell sin redirigir stderr
+            $logFile = storage_path('app/scripts/service.log');
+            $command = sprintf(
+                'powershell -Command "Start-Process -FilePath %s -ArgumentList %s -WindowStyle Hidden -PassThru | Select-Object -ExpandProperty Id"',
+                escapeshellarg($this->pythonPath),
+                escapeshellarg($this->scriptPath)
+            );
+        } else {
+            // Linux: Usar nohup
+            $command = sprintf(
+                'cd %s && nohup %s %s > %s/service.log 2>&1 & echo $!',
+                escapeshellarg(storage_path('app/scripts')),
+                escapeshellarg($this->pythonPath),
+                escapeshellarg($this->scriptPath),
+                escapeshellarg(storage_path('app/scripts'))
+            );
+        }
 
         $pid = trim(shell_exec($command));
         
@@ -178,9 +196,18 @@ class RegistraduriaService
      */
     protected function isProcessRunning(int $pid): bool
     {
+        $isWindows = strtoupper(substr(PHP_OS, 0, 3)) === 'WIN';
+        
         try {
-            $result = shell_exec("ps -p $pid -o pid=");
-            return !empty(trim($result));
+            if ($isWindows) {
+                // Windows: Usar tasklist
+                $result = shell_exec("tasklist /FI \"PID eq $pid\" /NH 2>NUL");
+                return !empty($result) && strpos($result, (string)$pid) !== false;
+            } else {
+                // Linux: Usar ps
+                $result = shell_exec("ps -p $pid -o pid=");
+                return !empty(trim($result));
+            }
         } catch (\Exception $e) {
             return false;
         }
@@ -192,6 +219,7 @@ class RegistraduriaService
     public function detenerServicio(): bool
     {
         $pidFile = storage_path('app/scripts/service.pid');
+        $isWindows = strtoupper(substr(PHP_OS, 0, 3)) === 'WIN';
         
         if (!file_exists($pidFile)) {
             return false;
@@ -200,7 +228,13 @@ class RegistraduriaService
         $pid = (int) trim(file_get_contents($pidFile));
         
         if ($pid > 0 && $this->isProcessRunning($pid)) {
-            exec("kill $pid");
+            if ($isWindows) {
+                // Windows: Usar taskkill
+                exec("taskkill /PID $pid /F");
+            } else {
+                // Linux: Usar kill
+                exec("kill $pid");
+            }
             @unlink($pidFile);
             Log::info('Servicio de consulta detenido', ['pid' => $pid]);
             return true;

@@ -12,8 +12,20 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // Modificar el enum para incluir 'trabajador'
-        DB::statement("ALTER TABLE users MODIFY COLUMN role ENUM('admin', 'operator', 'trabajador') DEFAULT 'operator'");
+        $driver = DB::getDriverName();
+        
+        if ($driver === 'mysql') {
+            // MySQL: Modificar el ENUM para incluir 'trabajador'
+            DB::statement("ALTER TABLE users MODIFY COLUMN role ENUM('admin', 'operator', 'trabajador') DEFAULT 'operator'");
+        } else {
+            // PostgreSQL: Agregar restricción CHECK
+            DB::statement("ALTER TABLE users DROP CONSTRAINT IF EXISTS users_role_check");
+            DB::statement("
+                ALTER TABLE users 
+                ADD CONSTRAINT users_role_check 
+                CHECK (role IN ('admin', 'operator', 'trabajador'))
+            ");
+        }
     }
 
     /**
@@ -21,11 +33,17 @@ return new class extends Migration
      */
     public function down(): void
     {
-        // Revertir a los valores originales
-        // Primero cambiar los trabajadores a operator
+        $driver = DB::getDriverName();
+        
+        // Cambiar los trabajadores a operator
         DB::table('users')->where('role', 'trabajador')->update(['role' => 'operator']);
         
-        // Luego modificar el enum
-        DB::statement("ALTER TABLE users MODIFY COLUMN role ENUM('admin', 'operator') DEFAULT 'operator'");
+        if ($driver === 'mysql') {
+            // MySQL: Revertir el ENUM
+            DB::statement("ALTER TABLE users MODIFY COLUMN role ENUM('admin', 'operator') DEFAULT 'operator'");
+        } else {
+            // PostgreSQL: Eliminar la restricción
+            DB::statement("ALTER TABLE users DROP CONSTRAINT IF EXISTS users_role_check");
+        }
     }
 };

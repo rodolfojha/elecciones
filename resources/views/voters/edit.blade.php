@@ -3,17 +3,8 @@
         <div class="mx-auto sm:px-6 lg:px-8">
             <!-- Encabezado -->
             <div class="mb-6">
-                <div class="flex items-center">
-                    <a href="{{ route('voters.index') }}" class="mr-4 text-gray-500 hover:text-gray-700">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
-                        </svg>
-                    </a>
-                    <div>
-                        <h1 class="text-2xl font-bold text-gray-900">Editar Persona</h1>
-                        <p class="text-gray-600">{{ $voter->nombre }} {{ $voter->apellido }} - {{ $voter->cedula }}</p>
-                    </div>
-                </div>
+                <h1 class="text-2xl font-bold text-gray-900">Editar Persona</h1>
+                <p class="text-gray-600">{{ $voter->nombre }} {{ $voter->apellido }} - {{ $voter->cedula }}</p>
             </div>
 
             <!-- Formulario -->
@@ -149,13 +140,13 @@
                     </div>
 
                     <!-- Botones -->
-                    <div class="mt-8 pt-6 border-t border-gray-200 flex justify-end space-x-4">
+                    <div class="mt-8 pt-6 border-t border-gray-200 flex flex-col md:flex-row md:justify-end gap-4">
                         <a href="{{ route('voters.index') }}" 
-                            class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors">
+                            class="w-full md:w-auto px-6 py-3 md:py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors text-center">
                             Cancelar
                         </a>
                         <button type="submit" 
-                            class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors">
+                            class="w-full md:w-auto px-6 py-3 md:py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors">
                             Actualizar
                         </button>
                     </div>

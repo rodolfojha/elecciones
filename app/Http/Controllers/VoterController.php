@@ -152,4 +152,18 @@ class VoterController extends Controller
 
         return response()->json($result);
     }
+
+    /**
+     * Mostrar mapa con lugares de votación
+     */
+    public function map()
+    {
+        // Obtener todos los votantes con información de votación
+        $voters = Voter::whereNotNull('puesto_votacion')
+            ->whereNotNull('direccion_puesto')
+            ->select('id', 'nombre', 'apellido', 'cedula', 'departamento', 'municipio', 'puesto_votacion', 'direccion_puesto', 'mesa')
+            ->get();
+
+        return view('voters.map', compact('voters'));
+    }
 }

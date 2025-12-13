@@ -30,8 +30,11 @@
                     </flux:navlist.item>
                     --}}
                     @if(auth()->user()->isTrabajador() || auth()->user()->isAdmin())
-                        <flux:navlist.item icon="user-plus" :href="route('voters.index')" :current="request()->routeIs('voters.*')" wire:navigate class="sidebar-nav-item">
+                        <flux:navlist.item icon="user-plus" :href="route('voters.index')" :current="request()->routeIs('voters.index') || request()->routeIs('voters.create') || request()->routeIs('voters.edit') || request()->routeIs('voters.show')" wire:navigate class="sidebar-nav-item">
                             <span class="sidebar-text">{{ __('Registro Personas') }}</span>
+                        </flux:navlist.item>
+                        <flux:navlist.item icon="map" :href="route('voters.map')" :current="request()->routeIs('voters.map')" wire:navigate class="sidebar-nav-item">
+                            <span class="sidebar-text">{{ __('Mapa de Votación') }}</span>
                         </flux:navlist.item>
                     @endif
                     {{-- OCULTO: Completados

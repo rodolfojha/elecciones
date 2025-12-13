@@ -315,6 +315,7 @@ Route::middleware('auth')->group(function () {
     Route::middleware([App\Http\Middleware\CheckRole::class . ':admin,trabajador'])->group(function () {
         Route::resource('voters', App\Http\Controllers\VoterController::class);
         Route::post('/voters/consultar-cedula', [App\Http\Controllers\VoterController::class, 'consultarCedula'])->name('voters.consultar-cedula');
+        Route::get('/voters-map', [App\Http\Controllers\VoterController::class, 'map'])->name('voters.map');
     });
     
     // Configuración del perfil
