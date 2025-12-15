@@ -39,29 +39,16 @@
                             @enderror
                         </div>
 
-                        <!-- Cédula con botón de consulta -->
+                        <!-- Cédula -->
                         <div class="md:col-span-2">
                             <label for="cedula" class="block text-sm font-medium text-gray-700 mb-2">
                                 Cédula de Ciudadanía <span class="text-red-500">*</span>
                             </label>
-                            <div class="flex flex-col sm:flex-row gap-2">
-                                <input type="text" name="cedula" id="cedula" value="{{ old('cedula') }}" required
-                                    class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('cedula') border-red-500 @enderror"
-                                    placeholder="Ingrese el número de cédula"
-                                    pattern="[0-9]+"
-                                    title="Solo números">
-                                <button type="button" id="btnConsultar" onclick="consultarCedula()"
-                                    class="w-full sm:w-auto px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-colors flex items-center justify-center">
-                                    <svg id="iconSearch" class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                                    </svg>
-                                    <svg id="iconLoading" class="animate-spin w-5 h-5 mr-2 hidden" fill="none" viewBox="0 0 24 24">
-                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                    </svg>
-                                    <span id="btnText">Consultar</span>
-                                </button>
-                            </div>
+                            <input type="text" name="cedula" id="cedula" value="{{ old('cedula') }}" required
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('cedula') border-red-500 @enderror"
+                                placeholder="Ingrese el número de cédula"
+                                pattern="[0-9]+"
+                                title="Solo números">
                             @error('cedula')
                                 <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
                             @enderror
