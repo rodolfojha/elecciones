@@ -112,6 +112,7 @@
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cédula</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Lugar de Votación</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Estado</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Consulta</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fecha</th>
                                 <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
                             </tr>
@@ -154,6 +155,32 @@
                                         <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $voter->estado == 'activo' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
                                             {{ ucfirst($voter->estado) }}
                                         </span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        @php
+                                            $statusConfig = [
+                                                'pending' => ['bg' => 'bg-yellow-100', 'text' => 'text-yellow-800', 'label' => 'Pendiente', 'icon' => 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z'],
+                                                'processing' => ['bg' => 'bg-blue-100', 'text' => 'text-blue-800', 'label' => 'Procesando', 'icon' => 'M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15'],
+                                                'completed' => ['bg' => 'bg-green-100', 'text' => 'text-green-800', 'label' => 'Completado', 'icon' => 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z'],
+                                                'failed' => ['bg' => 'bg-red-100', 'text' => 'text-red-800', 'label' => 'Fallido', 'icon' => 'M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z'],
+                                            ];
+                                            $status = $statusConfig[$voter->consulta_status] ?? $statusConfig['pending'];
+                                        @endphp
+                                        <div class="flex items-center">
+                                            <span class="px-2 py-1 inline-flex items-center text-xs leading-5 font-semibold rounded-full {{ $status['bg'] }} {{ $status['text'] }}">
+                                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ $status['icon'] }}"></path>
+                                                </svg>
+                                                {{ $status['label'] }}
+                                            </span>
+                                            @if($voter->consulta_status === 'failed' && $voter->consulta_error)
+                                                <button type="button" class="ml-2 text-red-600 hover:text-red-800" title="{{ $voter->consulta_error }}">
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                                    </svg>
+                                                </button>
+                                            @endif
+                                        </div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                         {{ $voter->created_at->format('d/m/Y') }}

@@ -18,6 +18,13 @@ class Voter extends Model
         'telefono',
         'notas',
         'estado',
+        'consulta_status',
+        'consulta_error',
+        'consulta_completed_at',
+    ];
+
+    protected $casts = [
+        'consulta_completed_at' => 'datetime',
     ];
 
     /**

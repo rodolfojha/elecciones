@@ -81,10 +81,15 @@ class VoterController extends Controller
             'cedula.required' => 'La cédula es obligatoria.',
         ]);
 
+        // Crear el votante con estado 'pending' para la consulta
+        $validated['consulta_status'] = 'pending';
         $voter = Voter::create($validated);
 
+        // Encolar el job para consultar la información en segundo plano
+        \App\Jobs\ProcessVoterConsultaJob::dispatch($voter);
+
         return redirect()->route('voters.index')
-            ->with('success', 'Persona registrada correctamente.');
+            ->with('success', 'Persona registrada correctamente. La información de votación se está consultando en segundo plano.');
     }
 
     /**
