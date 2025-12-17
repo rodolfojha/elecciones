@@ -1,0 +1,9 @@
+
+# Python script files
+service.log
+service.pid
+requests/*.json
+responses/*.json
+venv/
+__pycache__/
+*.pyc
