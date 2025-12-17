@@ -29,14 +29,21 @@
                         <span class="sidebar-text">{{ __('Clientes') }}</span>
                     </flux:navlist.item>
                     --}}
-                    @if(auth()->user()->isTrabajador() || auth()->user()->isAdmin())
-                        <flux:navlist.item icon="user-plus" :href="route('voters.index')" :current="request()->routeIs('voters.index') || request()->routeIs('voters.create') || request()->routeIs('voters.edit') || request()->routeIs('voters.show')" wire:navigate class="sidebar-nav-item">
-                            <span class="sidebar-text">{{ __('Registro Personas') }}</span>
+                    @if(auth()->user()->isTrabajador())
+                         <flux:navlist.item icon="user-plus" :href="route('voters.create')" :current="request()->routeIs('voters.create')" wire:navigate class="sidebar-nav-item">
+                            <span class="sidebar-text">{{ __('Registrar Persona') }}</span>
+                        </flux:navlist.item>
+                    @endif
+
+                    @if(auth()->user()->isAdmin())
+                        <flux:navlist.item icon="users" :href="route('voters.index')" :current="request()->routeIs('voters.index') || request()->routeIs('voters.show') || request()->routeIs('voters.edit')" wire:navigate class="sidebar-nav-item">
+                            <span class="sidebar-text">{{ __('Personas Registradas') }}</span>
                         </flux:navlist.item>
                         <flux:navlist.item icon="map" :href="route('voters.map')" :current="request()->routeIs('voters.map')" wire:navigate class="sidebar-nav-item">
                             <span class="sidebar-text">{{ __('Mapa de Votación') }}</span>
                         </flux:navlist.item>
                     @endif
+
                     {{-- OCULTO: Completados
                     <flux:navlist.item icon="check-circle" :href="route('clients.completed')" :current="request()->routeIs('clients.completed')" wire:navigate class="sidebar-nav-item">
                         <span class="sidebar-text">{{ __('Completados') }}</span>
@@ -49,14 +56,17 @@
                         </flux:navlist.item>
                     @endif
                     --}}
-                    @if(!auth()->user()->isAdmin())
+                    @if(!auth()->user()->isAdmin() && !auth()->user()->isTrabajador())
                         <flux:navlist.item icon="clock" :href="route('history.index')" :current="request()->routeIs('history.*')" wire:navigate class="sidebar-nav-item">
                             <span class="sidebar-text">{{ __('Historial') }}</span>
                         </flux:navlist.item>
                     @endif
-                    <flux:navlist.item icon="chat-bubble-left-right" :href="route('messages.index')" :current="request()->routeIs('messages.*')" wire:navigate class="sidebar-nav-item">
-                        <span class="sidebar-text">{{ __('Mensajes') }}</span>
-                    </flux:navlist.item>
+                    
+                    @if(!auth()->user()->isTrabajador())
+                        <flux:navlist.item icon="chat-bubble-left-right" :href="route('messages.index')" :current="request()->routeIs('messages.*')" wire:navigate class="sidebar-nav-item">
+                            <span class="sidebar-text">{{ __('Mensajes') }}</span>
+                        </flux:navlist.item>
+                    @endif
                 </flux:navlist.group>
 
                 @if(auth()->user()->isAdmin())

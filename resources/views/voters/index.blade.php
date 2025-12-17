@@ -90,6 +90,16 @@
                                 <option value="inactivo" {{ request('estado') == 'inactivo' ? 'selected' : '' }}>Inactivos</option>
                             </select>
                         </div>
+                        @if(auth()->user()->isAdmin() && isset($trabajadores))
+                            <div class="w-full sm:w-48">
+                                <select name="user_id" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                    <option value="">Todos los trabajadores</option>
+                                    @foreach($trabajadores as $trabajador)
+                                        <option value="{{ $trabajador->id }}" {{ request('user_id') == $trabajador->id ? 'selected' : '' }}>{{ $trabajador->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        @endif
                         <button type="submit" class="px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700">
                             Buscar
                         </button>
@@ -137,6 +147,11 @@
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="text-sm font-mono text-gray-900">{{ $voter->cedula }}</div>
+                                        @if($voter->user)
+                                            <div class="text-xs text-gray-400 mt-1" title="Registrado por">
+                                                <i class="fas fa-user-edit mr-1"></i> {{ $voter->user->name }}
+                                            </div>
+                                        @endif
                                     </td>
                                     <td class="px-6 py-4">
                                         <div class="text-sm text-gray-900">

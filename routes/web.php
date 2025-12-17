@@ -350,7 +350,8 @@ Route::middleware(['auth', App\Http\Middleware\CheckRole::class . ':admin'])->gr
     Route::resource('users', App\Http\Controllers\UserController::class);
     
     // Gestión de trabajadores
-    Route::resource('trabajadores', App\Http\Controllers\TrabajadorController::class);
+    Route::resource('trabajadores', App\Http\Controllers\TrabajadorController::class)
+        ->parameters(['trabajadores' => 'trabajador']);
     
     // Gestión de cursos
     Route::resource('courses', App\Http\Controllers\CourseController::class);
@@ -367,3 +368,5 @@ Route::middleware(['auth', App\Http\Middleware\CheckRole::class . ':admin'])->gr
 Route::middleware(['auth', App\Http\Middleware\CheckRole::class . ':admin,operator'])->group(function () {
     // Aquí irán las rutas accesibles para ambos roles
 });
+
+

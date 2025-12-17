@@ -21,11 +21,20 @@ class Voter extends Model
         'consulta_status',
         'consulta_error',
         'consulta_completed_at',
+        'user_id',
     ];
 
     protected $casts = [
         'consulta_completed_at' => 'datetime',
     ];
+
+    /**
+     * Get the user that created the voter.
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 
     /**
      * Obtener el nombre completo del votante

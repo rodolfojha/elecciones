@@ -20,6 +20,12 @@ class VoterController extends Controller
      */
     public function index(Request $request)
     {
+        // Restringir acceso si es trabajador
+        if (auth()->user()->isTrabajador()) {
+            // Un trabajador no debería ver el índice de votantes, redirigir a create
+            return redirect()->route('voters.create');
+        }
+
         $query = Voter::query();
 
         // Búsqueda
@@ -38,16 +44,32 @@ class VoterController extends Controller
             $query->where('estado', $request->estado);
         }
 
+        // Filtro por trabajador (solo para admin)
+        if ($request->filled('user_id')) {
+            $query->where('user_id', $request->user_id);
+        }
+
+        // Cargar relación con usuario
+        $query->with('user');
+
         $voters = $query->orderBy('created_at', 'desc')->paginate(15);
 
-        // Estadísticas
+        // Estadísticas generales (si se filtra por usuario, ajustar estadísticas podría ser útil, pero mantenemos las globales por ahora o filtramos)
+        $statsQuery = Voter::query();
+        if ($request->filled('user_id')) {
+            $statsQuery->where('user_id', $request->user_id);
+        }
+
         $stats = [
-            'total' => Voter::count(),
-            'activos' => Voter::where('estado', 'activo')->count(),
-            'hoy' => Voter::whereDate('created_at', today())->count(),
+            'total' => $statsQuery->count(),
+            'activos' => $statsQuery->where('estado', 'activo')->count(),
+            'hoy' => $statsQuery->whereDate('created_at', today())->count(),
         ];
 
-        return view('voters.index', compact('voters', 'stats'));
+        // Obtener lista de trabajadores para el filtro (solo admin lo verá)
+        $trabajadores = \App\Models\User::where('role', 'trabajador')->get();
+
+        return view('voters.index', compact('voters', 'stats', 'trabajadores'));
     }
 
     /**
@@ -83,10 +105,19 @@ class VoterController extends Controller
 
         // Crear el votante con estado 'pending' para la consulta
         $validated['consulta_status'] = 'pending';
+        $validated['user_id'] = auth()->id(); // Asignar al usuario actual
+
         $voter = Voter::create($validated);
 
         // Encolar el job para consultar la información en segundo plano
         \App\Jobs\ProcessVoterConsultaJob::dispatch($voter);
+
+        // Si es trabajador, redirigir a create nuevamente para registrar otro rápido? O al index (que redirige al create)?
+        // Mejor redirigir al create con mensaje de éxito si es trabajador.
+        if (auth()->user()->isTrabajador()) {
+             return redirect()->route('voters.create')
+                ->with('success', 'Persona registrada correctamente. La información de votación se está consultando en segundo plano.');
+        }
 
         return redirect()->route('voters.index')
             ->with('success', 'Persona registrada correctamente. La información de votación se está consultando en segundo plano.');
@@ -97,6 +128,9 @@ class VoterController extends Controller
      */
     public function show(Voter $voter)
     {
+        if (auth()->user()->isTrabajador()) {
+            abort(403, 'No tienes permiso para ver este registro.');
+        }
         return view('voters.show', compact('voter'));
     }
 
@@ -105,6 +139,9 @@ class VoterController extends Controller
      */
     public function edit(Voter $voter)
     {
+        if (auth()->user()->isTrabajador()) {
+            abort(403, 'No tienes permiso para editar este registro.');
+        }
         return view('voters.edit', compact('voter'));
     }
 
@@ -113,6 +150,10 @@ class VoterController extends Controller
      */
     public function update(Request $request, Voter $voter)
     {
+        if (auth()->user()->isTrabajador()) {
+            abort(403, 'No tienes permiso para actualizar este registro.');
+        }
+
         $validated = $request->validate([
             'nombre' => 'required|string|max:255',
             'apellido' => 'required|string|max:255',
@@ -138,6 +179,10 @@ class VoterController extends Controller
      */
     public function destroy(Voter $voter)
     {
+        if (auth()->user()->isTrabajador()) {
+            abort(403, 'No tienes permiso para eliminar este registro.');
+        }
+
         $voter->delete();
 
         return redirect()->route('voters.index')
@@ -163,6 +208,10 @@ class VoterController extends Controller
      */
     public function map()
     {
+        if (auth()->user()->isTrabajador()) {
+             abort(403, 'No tienes permiso para ver el mapa.');
+        }
+
         // Obtener todos los votantes con información de votación
         $voters = Voter::whereNotNull('puesto_votacion')
             ->whereNotNull('direccion_puesto')

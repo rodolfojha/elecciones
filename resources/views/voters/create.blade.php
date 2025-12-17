@@ -154,10 +154,12 @@
 
                     <!-- Botones -->
                     <div class="mt-8 pt-6 border-t border-gray-200 flex flex-col lg:flex-row lg:justify-end gap-4">
-                        <a href="{{ route('voters.index') }}" 
-                            class="w-full lg:w-auto px-6 py-3 lg:py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors text-center">
-                            Cancelar
-                        </a>
+                        @if(!auth()->user()->isTrabajador())
+                            <a href="{{ route('voters.index') }}" 
+                                class="w-full lg:w-auto px-6 py-3 lg:py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors text-center">
+                                Cancelar
+                            </a>
+                        @endif
                         <button type="submit" 
                             class="w-full lg:w-auto px-6 py-3 lg:py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors">
                             Guardar Registro
@@ -184,10 +186,10 @@
             const btnText = document.getElementById('btnText');
 
             // Mostrar estado de carga en el botón
-            btnConsultar.disabled = true;
-            iconSearch.classList.add('hidden');
-            iconLoading.classList.remove('hidden');
-            btnText.textContent = 'Consultando...';
+            if(btnConsultar) btnConsultar.disabled = true;
+            if(iconSearch) iconSearch.classList.add('hidden');
+            if(iconLoading) iconLoading.classList.remove('hidden');
+            if(btnText) btnText.textContent = 'Consultando...';
 
             try {
                 const response = await fetch('{{ route("voters.consultar-cedula") }}', {
@@ -240,10 +242,10 @@
                 console.error('Error:', error);
             } finally {
                 // Restaurar botón
-                btnConsultar.disabled = false;
-                iconSearch.classList.remove('hidden');
-                iconLoading.classList.add('hidden');
-                btnText.textContent = 'Consultar';
+                if(btnConsultar) btnConsultar.disabled = false;
+                if(iconSearch) iconSearch.classList.remove('hidden');
+                if(iconLoading) iconLoading.classList.add('hidden');
+                if(btnText) btnText.textContent = 'Consultar';
             }
         }
 
