@@ -22,7 +22,6 @@ class VoterController extends Controller
     {
         // Restringir acceso si es trabajador
         if (auth()->user()->isTrabajador()) {
-            // Un trabajador no debería ver el índice de votantes, redirigir a create
             return redirect()->route('voters.create');
         }
 
@@ -54,7 +53,7 @@ class VoterController extends Controller
 
         $voters = $query->orderBy('created_at', 'desc')->paginate(15);
 
-        // Estadísticas generales (si se filtra por usuario, ajustar estadísticas podría ser útil, pero mantenemos las globales por ahora o filtramos)
+        // Estadísticas generales
         $statsQuery = Voter::query();
         if ($request->filled('user_id')) {
             $statsQuery->where('user_id', $request->user_id);
@@ -112,8 +111,6 @@ class VoterController extends Controller
         // Encolar el job para consultar la información en segundo plano
         \App\Jobs\ProcessVoterConsultaJob::dispatch($voter);
 
-        // Si es trabajador, redirigir a create nuevamente para registrar otro rápido? O al index (que redirige al create)?
-        // Mejor redirigir al create con mensaje de éxito si es trabajador.
         if (auth()->user()->isTrabajador()) {
              return redirect()->route('voters.create')
                 ->with('success', 'Persona registrada correctamente. La información de votación se está consultando en segundo plano.');
@@ -219,5 +216,94 @@ class VoterController extends Controller
             ->get();
 
         return view('voters.map', compact('voters'));
+    }
+
+    /**
+     * Exportar votantes a CSV (compatible con Excel)
+     */
+    public function export(Request $request)
+    {
+        if (auth()->user()->isTrabajador()) {
+            abort(403, 'No tienes permiso para exportar.');
+        }
+
+        $query = Voter::query();
+
+        // Aplicar los mismos filtros que en el index
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('nombre', 'like', "%{$search}%")
+                  ->orWhere('apellido', 'like', "%{$search}%")
+                  ->orWhere('cedula', 'like', "%{$search}%")
+                  ->orWhere('municipio', 'like', "%{$search}%");
+            });
+        }
+        if ($request->filled('estado')) {
+            $query->where('estado', $request->estado);
+        }
+        if ($request->filled('user_id')) {
+            $query->where('user_id', $request->user_id);
+        }
+
+        // Cargar relación user
+        $query->with('user');
+
+        $voters = $query->orderBy('created_at', 'desc')->get();
+
+        $filename = 'votantes-' . date('Y-m-d-H-i') . '.csv';
+
+        $headers = [
+            "Content-type"        => "text/csv; charset=UTF-8",
+            "Content-Disposition" => "attachment; filename=$filename",
+            "Pragma"              => "no-cache",
+            "Cache-Control"       => "must-revalidate, post-check=0, pre-check=0",
+            "Expires"             => "0"
+        ];
+
+        $callback = function() use ($voters) {
+            $handle = fopen('php://output', 'w');
+            
+            // UTF-8 BOM para que Excel abra bien los caracteres latinos
+            fprintf($handle, chr(0xEF).chr(0xBB).chr(0xBF));
+
+            // Encabezados
+            fputcsv($handle, [
+                'Nombre', 
+                'Apellido', 
+                'Cédula', 
+                'Teléfono', 
+                'Departamento', 
+                'Municipio', 
+                'Puesto Votación', 
+                'Dirección Puesto', 
+                'Mesa', 
+                'Estado', 
+                'Notas', 
+                'Registrado Por',
+                'Fecha Registro'
+            ]);
+
+            foreach ($voters as $voter) {
+                fputcsv($handle, [
+                    $voter->nombre,
+                    $voter->apellido,
+                    $voter->cedula,
+                    $voter->telefono,
+                    $voter->departamento,
+                    $voter->municipio,
+                    $voter->puesto_votacion,
+                    $voter->direccion_puesto,
+                    $voter->mesa,
+                    ucfirst($voter->estado),
+                    $voter->notas,
+                    $voter->user ? $voter->user->name : 'Desconocido',
+                    $voter->created_at->format('Y-m-d H:i')
+                ]);
+            }
+            fclose($handle);
+        };
+
+        return response()->stream($callback, 200, $headers);
     }
 }

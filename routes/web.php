@@ -313,6 +313,7 @@ Route::middleware('auth')->group(function () {
     
     // Rutas de Registro de Personas (Voters) - Solo para trabajadores y admin
     Route::middleware([App\Http\Middleware\CheckRole::class . ':admin,trabajador'])->group(function () {
+        Route::get('/voters/export', [App\Http\Controllers\VoterController::class, 'export'])->name('voters.export');
         Route::resource('voters', App\Http\Controllers\VoterController::class);
         Route::post('/voters/consultar-cedula', [App\Http\Controllers\VoterController::class, 'consultarCedula'])->name('voters.consultar-cedula');
         Route::get('/voters-map', [App\Http\Controllers\VoterController::class, 'map'])->name('voters.map');
