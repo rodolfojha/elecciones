@@ -15,26 +15,24 @@ class MessageController extends Controller
      */
     public function index()
     {
-        // Obtener clientes completados con sus teléfonos
-        $query = Client::where('status', 'completed')
-            ->whereNotNull('phone')
-            ->where('phone', '!=', '');
+        // Obtener votantes con teléfonos
+        $query = \App\Models\Voter::whereNotNull('telefono')
+            ->where('telefono', '!=', '');
         
-        // Si es operador, solo ver sus propios clientes
+        // Si no es admin, solo ver sus propios registros
         if (!auth()->user()->isAdmin()) {
-            $query->where('assigned_to', auth()->id());
+            $query->where('user_id', auth()->id());
         }
         
-        $completedClients = $query->select('id', 'phone', 'first_name', 'last_name')
-            ->orderBy('phone')
+        $voters = $query->select('id', 'telefono', 'nombre', 'apellido')
+            ->orderBy('telefono')
             ->get();
         
-        // Obtener el último mensaje si existe
-        $lastMessage = Message::with(['user', 'completedClients'])
-            ->latest()
-            ->first();
+        // Obtener el último mensaje si existe (opcional, por ahora lo dejamos como nulo o lo mantenemos si es relevante)
+        // Para evitar errores con relaciones de clientes que ya no usamos aqui, podemos omitirlo o adaptarlo.
+        $lastMessage = Message::latest()->first();
         
-        return view('messages.index', compact('completedClients', 'lastMessage'));
+        return view('messages.index', compact('voters', 'lastMessage'));
     }
 
 

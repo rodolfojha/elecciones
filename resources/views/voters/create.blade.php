@@ -52,16 +52,7 @@
                             @error('cedula')
                                 <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
                             @enderror
-                            <div class="mt-2 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-                                <div class="flex items-start">
-                                    <svg class="w-5 h-5 text-blue-600 mt-0.5 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                    </svg>
-                                    <p class="text-sm text-blue-800">
-                                        <strong>Consulta automática:</strong> Al guardar, la información de votación se consultará automáticamente en segundo plano. Puedes continuar registrando más personas sin esperar.
-                                    </p>
-                                </div>
-                            </div>
+
                         </div>
 
                         <!-- Teléfono -->
@@ -74,83 +65,18 @@
                                 placeholder="Número de teléfono">
                         </div>
 
-                        <!-- Espacio -->
-                        <div></div>
-                    </div>
-
-                    <!-- Sección de Información de Votación -->
-                    <div class="mt-8 pt-6 border-t border-gray-200">
-                        <h3 class="text-lg font-medium text-gray-900 mb-4 flex items-center">
-                            <svg class="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                            </svg>
-                            Información de Votación
-                            <span class="ml-2 text-sm font-normal text-gray-500">(Se completa automáticamente al consultar la cédula)</span>
-                        </h3>
-
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <!-- Departamento -->
-                            <div>
-                                <label for="departamento" class="block text-sm font-medium text-gray-700 mb-2">
-                                    Departamento
-                                </label>
-                                <input type="text" name="departamento" id="departamento" value="{{ old('departamento') }}"
-                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-50"
-                                    placeholder="Se obtiene automáticamente">
-                            </div>
-
-                            <!-- Municipio -->
-                            <div>
-                                <label for="municipio" class="block text-sm font-medium text-gray-700 mb-2">
-                                    Municipio
-                                </label>
-                                <input type="text" name="municipio" id="municipio" value="{{ old('municipio') }}"
-                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-50"
-                                    placeholder="Se obtiene automáticamente">
-                            </div>
-
-                            <!-- Puesto de Votación -->
-                            <div class="md:col-span-2">
-                                <label for="puesto_votacion" class="block text-sm font-medium text-gray-700 mb-2">
-                                    Puesto de Votación
-                                </label>
-                                <input type="text" name="puesto_votacion" id="puesto_votacion" value="{{ old('puesto_votacion') }}"
-                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-50"
-                                    placeholder="Se obtiene automáticamente">
-                            </div>
-
-                            <!-- Dirección del Puesto -->
-                            <div class="md:col-span-2">
-                                <label for="direccion_puesto" class="block text-sm font-medium text-gray-700 mb-2">
-                                    Dirección del Puesto de Votación
-                                </label>
-                                <textarea name="direccion_puesto" id="direccion_puesto" rows="2"
-                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-50"
-                                    placeholder="Se obtiene automáticamente">{{ old('direccion_puesto') }}</textarea>
-                            </div>
-
-                            <!-- Mesa -->
-                            <div>
-                                <label for="mesa" class="block text-sm font-medium text-gray-700 mb-2">
-                                    Mesa
-                                </label>
-                                <input type="text" name="mesa" id="mesa" value="{{ old('mesa') }}"
-                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-50"
-                                    placeholder="Se obtiene automáticamente">
-                            </div>
-
-                            <!-- Notas -->
-                            <div class="md:col-span-2">
-                                <label for="notas" class="block text-sm font-medium text-gray-700 mb-2">
-                                    Notas adicionales
-                                </label>
-                                <textarea name="notas" id="notas" rows="3"
-                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                                    placeholder="Observaciones o notas adicionales...">{{ old('notas') }}</textarea>
-                            </div>
+                        <!-- Notas (visible para todos) -->
+                        <div class="md:col-span-2">
+                            <label for="notas" class="block text-sm font-medium text-gray-700 mb-2">
+                                Notas adicionales
+                            </label>
+                            <textarea name="notas" id="notas" rows="3"
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                placeholder="Observaciones o notas adicionales...">{{ old('notas') }}</textarea>
                         </div>
                     </div>
+
+
 
                     <!-- Botones -->
                     <div class="mt-8 pt-6 border-t border-gray-200 flex flex-col lg:flex-row lg:justify-end gap-4">

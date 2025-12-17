@@ -16,7 +16,7 @@
                     <div class="bg-green-500 text-white p-4 rounded-t-lg">
                         <h2 class="text-lg font-semibold">Nuevo Mensaje</h2>
                         <p class="text-sm text-green-100" id="selectedCount">
-                            0 cliente(s) seleccionado(s)
+                            0 usuario(s) seleccionado(s)
                         </p>
                     </div>
 
@@ -155,9 +155,9 @@
                 <!-- Panel derecho: Lista de teléfonos -->
                 <div class="lg:col-span-1 bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700">
                     <div class="p-4 border-b border-gray-200 dark:border-gray-700">
-                        <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Clientes Completados</h2>
+                        <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Usuarios Registrados</h2>
                         <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                            <span id="totalCount">{{ $completedClients->count() }}</span> contacto(s) disponible(s)
+                            <span id="totalCount">{{ $voters->count() }}</span> contacto(s) disponible(s)
                         </p>
                         <!-- Selector de todos/ninguno -->
                         <div class="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">
@@ -176,25 +176,25 @@
                     
                     <!-- Lista de teléfonos con checkboxes -->
                     <div class="overflow-y-auto" style="max-height: 600px;">
-                        @forelse($completedClients as $client)
+                        @forelse($voters as $voter)
                             <div class="p-3 border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
                                 <div class="flex items-center space-x-3">
                                     <input 
                                         type="checkbox" 
-                                        class="client-checkbox rounded border-gray-300 text-green-600 focus:ring-green-500" 
-                                        value="{{ $client->id }}"
-                                        data-phone="{{ $client->phone }}"
-                                        id="client_{{ $client->id }}"
+                                        class="contact-checkbox rounded border-gray-300 text-green-600 focus:ring-green-500" 
+                                        value="{{ $voter->id }}"
+                                        data-phone="{{ $voter->telefono }}"
+                                        id="voter_{{ $voter->id }}"
                                     >
                                     <div class="w-10 h-10 rounded-full bg-green-500 flex items-center justify-center text-white font-semibold">
                                         <i class="fas fa-phone"></i>
                                     </div>
                                     <div class="flex-1 min-w-0">
                                         <p class="text-sm font-medium text-gray-900 dark:text-white truncate">
-                                            {{ $client->phone }}
+                                            {{ $voter->telefono }}
                                         </p>
                                         <p class="text-xs text-gray-500 dark:text-gray-400 truncate">
-                                            {{ $client->first_name }} {{ $client->last_name }}
+                                            {{ $voter->nombre }} {{ $voter->apellido }}
                                         </p>
                                     </div>
                                 </div>
@@ -202,7 +202,7 @@
                         @empty
                             <div class="p-4 text-center text-gray-500 dark:text-gray-400">
                                 <i class="fas fa-inbox text-3xl mb-2"></i>
-                                <p>No hay clientes completados</p>
+                                <p>No hay usuarios registrados con teléfono</p>
                             </div>
                         @endforelse
                     </div>
@@ -219,7 +219,7 @@
         const saveButton = document.getElementById('saveButton');
         const sendButton = document.getElementById('sendButton');
         const selectedCount = document.getElementById('selectedCount');
-        const clientCheckboxes = document.querySelectorAll('.client-checkbox');
+        const clientCheckboxes = document.querySelectorAll('.contact-checkbox');
         const selectAllCheckbox = document.getElementById('selectAll');
         const progressPanel = document.getElementById('progressPanel');
         const progressBar = document.getElementById('progressBar');
@@ -315,14 +315,14 @@
 
         // Función para guardar configuración
         async function saveConfiguration() {
-            const selectedPhones = Array.from(document.querySelectorAll('.client-checkbox:checked'))
+            const selectedPhones = Array.from(document.querySelectorAll('.contact-checkbox:checked'))
                 .map(cb => cb.getAttribute('data-phone'));
             const message = messageContent.value.trim();
             const frequency = document.getElementById('frequency').value;
 
             // Validaciones básicas
             if (selectedPhones.length === 0) {
-                showStatus('Por favor selecciona al menos un cliente', 'error');
+                showStatus('Por favor selecciona al menos un usuario', 'error');
                 return;
             }
             
@@ -360,7 +360,7 @@
                 const result = await response.json();
 
                 if (result.success) {
-                    showStatus(`✅ Configuración guardada para ${selectedPhones.length} cliente(s)`, 'success');
+                    showStatus(`✅ Configuración guardada para ${selectedPhones.length} usuario(s)`, 'success');
                 } else {
                     showStatus('❌ Error al guardar: ' + (result.message || 'Error desconocido'), 'error');
                 }
@@ -477,8 +477,8 @@
 
         // Función para actualizar selección de clientes
         function updateSelectedClients() {
-            const selected = Array.from(document.querySelectorAll('.client-checkbox:checked'));
-            selectedCount.textContent = selected.length + ' cliente(s) seleccionado(s)';
+            const selected = Array.from(document.querySelectorAll('.contact-checkbox:checked'));
+            selectedCount.textContent = selected.length + ' usuario(s) seleccionado(s)';
             updateSelectAllCheckbox();
         }
 

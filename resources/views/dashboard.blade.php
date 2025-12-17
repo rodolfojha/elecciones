@@ -8,72 +8,42 @@
 
             @if(auth()->user()->isAdmin())
                 <!-- Estadísticas principales - Admin -->
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <!-- Estadísticas principales - Admin -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                     <x-card
-                        title="Total Usuarios"
-                        :value="$stats['total_users']"
-                        subtitle="Usuarios registrados"
+                        title="Usuarios Añadidos"
+                        :value="$stats['total_voters']"
+                        subtitle="Total en el sistema"
                         color="purple"
                         icon="fa-solid fa-users"
                     />
 
                     <x-card
-                        title="Operadores Activos"
-                        :value="$stats['total_operators']"
-                        subtitle="Activos en el sistema"
-                        color="blue"
-                        icon="fa-solid fa-user-headset"
-                    />
-
-                    <x-card
-                        title="Llamadas Hoy"
-                        :value="$stats['calls_today']"
-                        subtitle="Total del día"
+                        title="Añadidos Hoy"
+                        :value="$stats['voters_today']"
+                        subtitle="Registrados el día de hoy"
                         color="green"
-                        icon="fa-solid fa-phone"
-                    />
-
-                    <x-card
-                        title="Clientes Esperando"
-                        :value="$stats['available_clients']"
-                        subtitle="Disponibles ahora"
-                        color="amber"
-                        icon="fa-solid fa-clock"
+                        icon="fa-solid fa-user-plus"
                     />
                 </div>
             @else
                 <!-- Estadísticas principales - Operador -->
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <!-- Estadísticas principales - Operador -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                     <x-card
-                        title="Mis Llamadas Hoy"
-                        :value="$stats['my_calls_today']"
-                        subtitle="Llamadas realizadas"
+                        title="Mis Registros"
+                        :value="$stats['my_total_voters']"
+                        subtitle="Total registrados por mí"
                         color="blue"
-                        icon="fa-solid fa-phone"
-                    />
-
-                    <x-card
-                        title="Mis Clientes Activos"
-                        :value="$stats['my_clients']"
-                        subtitle="En proceso"
-                        color="amber"
                         icon="fa-solid fa-users"
                     />
 
                     <x-card
-                        title="Llamadas Completadas"
-                        :value="$stats['completed_calls']"
-                        subtitle="Total completadas"
+                        title="Registros Hoy"
+                        :value="$stats['my_voters_today']"
+                        subtitle="Registrados hoy por mí"
                         color="green"
-                        icon="fa-solid fa-check-circle"
-                    />
-
-                    <x-card
-                        title="Total Atendidos"
-                        :value="$stats['total_assigned']"
-                        subtitle="Todos los clientes"
-                        color="purple"
-                        icon="fa-solid fa-address-book"
+                        icon="fa-solid fa-user-plus"
                     />
                 </div>
             @endif
@@ -98,10 +68,10 @@
                                 <p class="text-sm text-gray-600 dark:text-gray-400 mb-5">Gestiona el sistema y usuarios</p>
                                 
                                 <div class="space-y-3">
-                                    <a href="{{ route('users.index') }}" class="w-full flex items-center justify-between p-4 bg-gray-900 hover:bg-gray-800 dark:bg-gray-700 dark:hover:bg-gray-600 text-white rounded-lg transition-colors">
+                                    <a href="{{ route('voters.create') }}" class="w-full flex items-center justify-between p-4 bg-gray-900 hover:bg-gray-800 dark:bg-gray-700 dark:hover:bg-gray-600 text-white rounded-lg transition-colors">
                                         <div class="flex items-center">
-                                            <i class="fa-solid fa-users mr-3"></i>
-                                            <span>Gestionar Usuarios</span>
+                                            <i class="fa-solid fa-user-plus mr-3"></i>
+                                            <span>Registrar Nueva Persona</span>
                                         </div>
                                         <i class="fa-solid fa-arrow-right text-sm"></i>
                                     </a>
@@ -124,32 +94,23 @@
                             <div class="flex justify-between items-start mb-1">
                                 <div class="flex items-center">
                                     <svg class="h-5 w-5 text-blue-600 dark:text-blue-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
-                                    </svg>
-                                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Estadísticas Generales</h3>
-                                </div>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                     </svg>
+                                     <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Mapa de Votación</h3>
+                                 </div>
                             </div>
                     
                             <!-- Descripción -->
-                            <p class="text-sm text-gray-600 dark:text-gray-400 mb-5">Resumen del sistema</p>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 mb-5">Visualiza la distribución geográfica</p>
                     
-                            <!-- Lista de estadísticas -->
-                            <div class="space-y-2 mb-4">
-                                <div class="flex justify-between items-center py-2 border-b border-gray-200 dark:border-gray-700 last:border-b-0">
-                                    <span class="text-sm text-gray-900 dark:text-white">• Clientes en Espera</span>
-                                    <div class="flex items-center space-x-2">
-                                        <span class="text-sm font-medium text-gray-900 dark:text-white">{{ $stats['available_clients'] }}</span>
-                                    </div>
+                            <a href="{{ route('voters.map') }}" class="w-full flex items-center justify-between p-4 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors">
+                                <div class="flex items-center">
+                                    <i class="fa-solid fa-map-marked-alt mr-3"></i>
+                                    <span>Ver Mapa Interactivo</span>
                                 </div>
-                                <div class="flex justify-between items-center py-2 border-b border-gray-200 dark:border-gray-700 last:border-b-0">
-                                    <span class="text-sm text-gray-900 dark:text-white">• Llamadas Totales</span>
-                                    <div class="flex items-center space-x-2">
-                                        <span class="text-sm font-medium text-gray-900 dark:text-white">
-                                            {{ $stats['total_clients'] }}
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
+                                <i class="fa-solid fa-arrow-right text-sm"></i>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -162,33 +123,22 @@
                             <div class="flex justify-between items-start mb-1">
                                 <div class="flex items-center">
                                     <svg class="h-5 w-5 text-blue-600 dark:text-blue-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
                                     </svg>
-                                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Panel de Operador</h3>
+                                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Acciones Rápidas</h3>
                                 </div>
                             </div>
                     
-                            <!-- Contenido principal -->
-                            <div class="mb-4">
-                                <p class="text-sm text-gray-600 dark:text-gray-400 mb-5">Gestiona tus llamadas y clientes</p>
-                                
-                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                    <a href="{{ route('clients.index') }}" class="flex flex-col items-center justify-center p-6 bg-gray-900 hover:bg-gray-800 dark:bg-gray-700 dark:hover:bg-gray-600 text-white rounded-lg transition-colors">
-                                        <i class="fa-solid fa-phone text-2xl mb-2"></i>
-                                        <span class="font-medium">Nueva Llamada</span>
-                                    </a>
-                                    
-                                    <a href="{{ route('history.index', ['filter' => 'active']) }}" class="flex flex-col items-center justify-center p-6 bg-gray-50 hover:bg-gray-100 dark:bg-gray-800/50 dark:hover:bg-gray-800 text-gray-900 dark:text-white rounded-lg transition-colors border border-gray-200 dark:border-gray-700">
-                                        <i class="fa-solid fa-users text-2xl mb-2"></i>
-                                        <span class="font-medium">Mis Clientes</span>
-                                    </a>
-                                    
-                                    <a href="{{ route('history.index') }}" class="flex flex-col items-center justify-center p-6 bg-gray-50 hover:bg-gray-100 dark:bg-gray-800/50 dark:hover:bg-gray-800 text-gray-900 dark:text-white rounded-lg transition-colors border border-gray-200 dark:border-gray-700">
-                                        <i class="fa-solid fa-clock text-2xl mb-2"></i>
-                                        <span class="font-medium">Historial</span>
-                                    </a>
+                            <!-- Descripción -->
+                            <p class="text-sm text-gray-600 dark:text-gray-400 mb-5">Accesos directos</p>
+                    
+                            <a href="{{ route('voters.create') }}" class="w-full flex items-center justify-between p-4 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors">
+                                <div class="flex items-center">
+                                    <i class="fa-solid fa-user-plus mr-3"></i>
+                                    <span>Registrar Nueva Persona</span>
                                 </div>
-                            </div>
+                                <i class="fa-solid fa-arrow-right text-sm"></i>
+                            </a>
                         </div>
                     </div>
                 </div>
