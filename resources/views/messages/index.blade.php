@@ -53,14 +53,14 @@
                                     type="number" 
                                     name="frequency" 
                                     id="frequency"
-                                    min="60"
-                                    value="60"
+                                    min="2"
+                                    value="2"
                                     class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 dark:bg-gray-700 dark:text-white"
-                                    placeholder="Ej: 60"
+                                    placeholder="Ej: 2"
                                     required
                                 >
                                 <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">
-                                    Tiempo mínimo: 60 segundos entre cada mensaje
+                                    Tiempo mínimo: 2 segundos entre cada mensaje
                                 </p>
                             </div>
 
@@ -331,8 +331,8 @@
                 return;
             }
             
-            if (frequency < 60) {
-                showStatus('La frecuencia mínima es de 60 segundos', 'error');
+            if (frequency < 2) {
+                showStatus('La frecuencia mínima es de 2 segundos', 'error');
                 return;
             }
 

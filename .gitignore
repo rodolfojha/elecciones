@@ -25,3 +25,15 @@ Thumbs.db
 # Archivos temporales
 ver_materiales.php
 EJEMPLO-TABLA-MATERIALES.md
+/storage/app/venv/
+*.pyc
+__pycache__/
+*.bak
+*.bak2
+.env.old
+.env.from_git
+env
+storage/app/actual.txt
+storage/app/maximo.txt
+storage/app/logs.txt
+storage/app/datos.json
