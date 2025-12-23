@@ -12,8 +12,19 @@ Route::get('/', function () {
 Route::post('/messages/execute-python-script', function (Request $request) {
     try {
         // Rutas
-        $venvPath = storage_path('app/venv');
-        $pythonBinary = $venvPath . '/bin/python';
+        // Detectar sistema operativo y definir binario de Python
+        $isWindows = strtoupper(substr(PHP_OS, 0, 3)) === 'WIN';
+        
+        if ($isWindows) {
+            // En Windows local usamos el python del sistema
+            // Puedes ajustar esto si usas un venv local específico
+            $pythonBinary = 'python'; 
+        } else {
+            // En VPS Linux usamos el entorno virtual
+            $venvPath = storage_path('app/venv');
+            $pythonBinary = $venvPath . '/bin/python';
+        }
+
         $pythonScriptPath = storage_path('app/enviar_mensajes.py');
         $processFile = storage_path('app/proceso.json');
         
@@ -22,7 +33,8 @@ Route::post('/messages/execute-python-script', function (Request $request) {
             $processData = json_decode(file_get_contents($processFile), true);
             if ($processData && isset($processData['pid'])) {
                 // Verificar si el proceso sigue activo
-                if (posix_getpgid($processData['pid'])) {
+                // En Windows la verificación de procesos es diferente, por simplicidad en local omitimos check estricto o usamos tasklist
+                if (!$isWindows && posix_getpgid($processData['pid'])) {
                     return response()->json([
                         'success' => false,
                         'message' => 'Ya hay un proceso en ejecución (PID: ' . $processData['pid'] . ')'
@@ -31,18 +43,18 @@ Route::post('/messages/execute-python-script', function (Request $request) {
             }
         }
         
-        // Verificaciones
-        if (!file_exists($pythonBinary)) {
+        // Verificaciones (solo en Linux verificamos path absoluto del binario, en Windows confiamos en PATH)
+        if (!$isWindows && !file_exists($pythonBinary)) {
             return response()->json([
                 'success' => false,
-                'message' => 'Virtual environment no encontrado'
+                'message' => 'Virtual environment no encontrado en: ' . $pythonBinary
             ], 404);
         }
         
         if (!file_exists($pythonScriptPath)) {
             return response()->json([
                 'success' => false,
-                'message' => 'Script Python no encontrado'
+                'message' => 'Script Python no encontrado en: ' . $pythonScriptPath
             ], 404);
         }
         
@@ -61,11 +73,21 @@ Route::post('/messages/execute-python-script', function (Request $request) {
         file_put_contents($currentFile, "0");
         file_put_contents($maxFile, "0");
         
-        // Ejecutar el script en segundo plano (sin argumentos ahora)
-        $command = "cd " . escapeshellarg(storage_path('app')) . " && " . 
-                   escapeshellarg($pythonBinary) . " " . escapeshellarg($pythonScriptPath) . " > /dev/null 2>&1 & echo $!";
-        
-        $pid = trim(shell_exec($command));
+        // Ejecutar el script en segundo plano
+        if ($isWindows) {
+             // Windows: start /B corre en background
+             // Usamos wmic para obtener el PID es más complejo, pero start /B devuelve el control.
+             // Para obtener PID en Windows desde PHP es truculento sin extensiones.
+             // Usaremos popen para intentar capturarlo o simplemente no traquear PID en Windows local.
+             $command = "start /B " . $pythonBinary . " " . escapeshellarg($pythonScriptPath);
+             pclose(popen($command, "r"));
+             $pid = 1234; // Dummy PID para local windows por ahora
+        } else {
+            // Linux
+            $command = "cd " . escapeshellarg(storage_path('app')) . " && " . 
+                       escapeshellarg($pythonBinary) . " " . escapeshellarg($pythonScriptPath) . " > /dev/null 2>&1 & echo $!";
+            $pid = trim(shell_exec($command));
+        }
         
         // Guardar información del proceso
         $processData = [

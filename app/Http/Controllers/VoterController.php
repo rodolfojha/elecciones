@@ -111,6 +111,11 @@ class VoterController extends Controller
         // Encolar el job para consultar la información en segundo plano
         \App\Jobs\ProcessVoterConsultaJob::dispatch($voter);
 
+        // Enviar mensaje de bienvenida si tiene teléfono
+        if (!empty($voter->telefono)) {
+            \App\Jobs\SendWelcomeSmsJob::dispatch($voter);
+        }
+
         if (auth()->user()->isTrabajador()) {
              return redirect()->route('voters.create')
                 ->with('success', 'Persona registrada correctamente. La información de votación se está consultando en segundo plano.');

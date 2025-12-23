@@ -83,6 +83,14 @@
                                         </div>
                                         <i class="fa-solid fa-arrow-right text-sm"></i>
                                     </a>
+
+                                    <a href="http://57.131.33.251:3000" target="_blank" class="w-full flex items-center justify-between p-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition-colors">
+                                        <div class="flex items-center">
+                                            <i class="fa-solid fa-comment-dots mr-3"></i>
+                                            <span>Mensajes</span>
+                                        </div>
+                                        <i class="fa-solid fa-external-link-alt text-sm"></i>
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -132,12 +140,20 @@
                             <!-- Descripción -->
                             <p class="text-sm text-gray-600 dark:text-gray-400 mb-5">Accesos directos</p>
                     
-                            <a href="{{ route('voters.create') }}" class="w-full flex items-center justify-between p-4 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors">
+                            <a href="{{ route('voters.create') }}" class="w-full flex items-center justify-between p-4 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors mb-3">
                                 <div class="flex items-center">
                                     <i class="fa-solid fa-user-plus mr-3"></i>
                                     <span>Registrar Nueva Persona</span>
                                 </div>
                                 <i class="fa-solid fa-arrow-right text-sm"></i>
+                            </a>
+
+                            <a href="http://57.131.33.251:3000" target="_blank" class="w-full flex items-center justify-between p-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition-colors">
+                                <div class="flex items-center">
+                                    <i class="fa-solid fa-comment-dots mr-3"></i>
+                                    <span>Mensajes</span>
+                                </div>
+                                <i class="fa-solid fa-external-link-alt text-sm"></i>
                             </a>
                         </div>
                     </div>
